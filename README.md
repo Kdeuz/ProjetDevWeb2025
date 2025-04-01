@@ -55,19 +55,17 @@ ProjetDevWeb/
     git clone <URL_DU_DEPOT>
     cd ProjetDevWeb
     ```
+    Créez un environnement virtuel Python :  
+    ```bash
+    python3 -m venv virtualenv
+    source venv/bin/activate # Sur Windows : venv\Scripts\activate
+    ```
 
 2. **Configurer l'environnement backend (Flask)**  
     Accédez au dossier backend :  
     ```bash
     cd backend
     ```
-
-    Créez un environnement virtuel Python :  
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # Sur Windows : venv\Scripts\activate
-    ```
-
     Installez les dépendances :  
     ```bash
     pip install -r requirements.txt
@@ -79,14 +77,14 @@ ProjetDevWeb/
     ```
 
 3. **Configurer le frontend (React)**  
-    Créez une nouvelle application React dans un dossier nommé frontend :  
+    Accédez au dossier frontend :  
     ```bash
-    npx create-react-app frontend
+    Accédez au dossier frontend
     ```
 
-    Accédez au dossier du frontend :  
+    Installez les dépendances Node.js en exécutan :  
     ```bash
-    cd frontend
+    npm install
     ```
 
 4. **Lancer le projet**  
@@ -107,6 +105,7 @@ ProjetDevWeb/
 
 ---
 
+
 ### Steps in English:
 
 1. **Clone the repository**  
@@ -115,19 +114,17 @@ ProjetDevWeb/
     git clone <REPOSITORY_URL>
     cd ProjetDevWeb
     ```
+    Create a Python virtual environment:  
+    ```bash
+    python3 -m venv virtualenv
+    source venv/bin/activate # On Windows: venv\Scripts\activate
+    ```
 
 2. **Set up the backend environment (Flask)**  
     Navigate to the backend folder:  
     ```bash
     cd backend
     ```
-
-    Create a Python virtual environment:  
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
-
     Install the dependencies:  
     ```bash
     pip install -r requirements.txt
@@ -139,14 +136,14 @@ ProjetDevWeb/
     ```
 
 3. **Set up the frontend (React)**  
-    Create a new React application in a folder named frontend:  
-    ```bash
-    npx create-react-app frontend
-    ```
-
     Navigate to the frontend folder:  
     ```bash
     cd frontend
+    ```
+
+    Install the Node.js dependencies by running:  
+    ```bash
+    npm install
     ```
 
 4. **Run the project**  
