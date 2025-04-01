@@ -79,7 +79,7 @@ ProjetDevWeb/
 3. **Configurer le frontend (React)**  
     Accédez au dossier frontend :  
     ```bash
-    Accédez au dossier frontend
+    cd frontend
     ```
 
     Installez les dépendances Node.js en exécutan :  
