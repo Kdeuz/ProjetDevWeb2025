@@ -1,0 +1,17 @@
+# Ignore virtual environment
+virtualenv/
+
+# Ignore Python bytecode
+*.pyc
+*.pyo
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+
+# Ignore node_modules for React project
+frontend/node_modules/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
