@@ -1,2 +1,5 @@
-Flask==2.1.1
-Flask-SQLAlchemy==2.5.1
+flask
+flask_sqlalchemy
+flask_cors
+flask_bcrypt
+flask_login
