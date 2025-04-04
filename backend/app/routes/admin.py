@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from app.models.code import db, CodeInscription
+from app import db
+from app.models.code import CodeInscription
 import random
 
 admin_bp = Blueprint('admin', __name__)
@@ -10,7 +11,7 @@ def generate_code():
     is_admin = True  # À remplacer par une vraie vérification de rôle
 
     if not is_admin:
-        return jsonify({"error": "Vous devez être administrateur pour générer un code"}), 403
+        return jsonify({"error": "Vous devez etre administrateur pour generer un code"}), 403
 
     # Générer un code d'inscription à 6 chiffres
     code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
@@ -19,12 +20,12 @@ def generate_code():
     db.session.add(new_code)
     db.session.commit()
 
-    return jsonify({"message": "Code généré", "code": code})
+    return jsonify({"message": "Code genere", "code": code})
 
 
 # Route pour voir les codes disponibles (non utilisés)
 @admin_bp.route('/admin/view_codes', methods=['GET'])
 def view_codes():
     codes = CodeInscription.query.filter_by(utilisé=False).all()
-    codes_list = [{"id": code.id, "code": code.code, "créé_le": code.créé_le} for code in codes]
+    codes_list = [{"id": code.id, "code": code.code, "cree_le": code.créé_le} for code in codes]
     return jsonify(codes_list)

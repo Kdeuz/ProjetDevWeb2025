@@ -22,13 +22,13 @@ def register():
     code_obj = CodeInscription.query.filter_by(code=data.get('code'), utilisé=False).first()
 
     if not code_obj or code_obj.is_expired():
-        return jsonify({"error": "Code d'inscription invalide, expiré ou déjà utilisé"}), 400
+        return jsonify({"error": "Code d'inscription invalide, expire ou déjà utilise"}), 400
 
     # Marque le code comme utilisé
     code_obj.utilisé = True
 
     if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email déjà utilisé'}), 409
+        return jsonify({'error': 'Email déjà utilise'}), 409
 
     new_user = User(
         email=data['email'],
@@ -43,7 +43,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'Inscription réussie'}), 201
+    return jsonify({'message': 'Inscription reussie'}), 201
 
 # --- Route : Connexion ---
 @auth_bp.route('/login', methods=['POST'])
@@ -53,7 +53,7 @@ def login():
 
     if user and user.check_password(data.get('password')):
         login_user(user)
-        return jsonify({'message': 'Connexion réussie', 'user': user.to_dict()}), 200
+        return jsonify({'message': 'Connexion reussie', 'user': user.to_dict()}), 200
 
     return jsonify({'error': 'Identifiants invalides'}), 401
 
@@ -62,7 +62,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return jsonify({'message': 'Déconnexion réussie'}), 200
+    return jsonify({'message': 'Deconnexion reussie'}), 200
 
 # --- Route : Données utilisateur connecté ---
 @auth_bp.route('/me', methods=['GET'])
@@ -75,7 +75,7 @@ def admin_required(f):
     @login_required
     def wrapper(*args, **kwargs):
         if not current_user.is_admin:
-            return jsonify({'error': 'Accès admin requis'}), 403
+            return jsonify({'error': 'Acces admin requis'}), 403
         return f(*args, **kwargs)
     wrapper.__name__ = f.__name__
     return wrapper
