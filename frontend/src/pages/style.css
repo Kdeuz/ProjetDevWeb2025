@@ -1,0 +1,751 @@
+
+
+/* FitnessPage.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #f0f8ff, #e6e6fa);
+    color: #333;
+}
+
+.page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #7a7c7a, #81c784);
+    color: white;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    animation: rotateGradient 6s linear infinite;
+    z-index: 0;
+}
+
+.header h1, .header p {
+    position: relative;
+    z-index: 1;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.header p {
+    font-size: 1.5rem;
+    margin-top: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes rotateGradient {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.2rem;
+}
+
+.about, .coachs, .calendar, .real-time, .testimonials, .membership, .newsletter {
+    margin: 40px 0;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 2rem;
+    color: #4caf50;
+    margin-bottom: 20px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+.coach-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.coach {
+    flex: 1 1 calc(50% - 20px);
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.coach-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #4caf50;
+}
+
+.schedule {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.schedule th, .schedule td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.schedule th {
+    background: #4caf50;
+    color: white;
+}
+
+.people-count {
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.testimonial {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial h4 {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.membership ul {
+    list-style: none;
+    padding: 0;
+}
+
+.membership ul li {
+    margin: 10px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.membership ul li::before {
+    content: '✔';
+    position: absolute;
+    left: 0;
+    color: #4caf50;
+}
+
+.join-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.join-button:hover {
+    background: #45a049;
+}
+
+.newsletter form {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.newsletter input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.newsletter button {
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.newsletter button:hover {
+    background: #45a049;
+}
+
+.equipment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.equipment-table th, .equipment-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.equipment-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.equipment-table td button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.equipment-table td button:hover {
+    background-color: #45a049;
+}
+
+.program-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.program-card {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    width: calc(25% - 20px);
+    text-align: center;
+}
+
+.program-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.program-card p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.program-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.program-btn:hover {
+    background-color: #45a049;
+}
+
+/* PiscinePage styles */
+.page.piscine-page {
+    font-family: 'Arial', sans-serif;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+  }
+  
+
+  .about, .classes, .real-time, .benefits, .testimonials, .contact {
+    margin-top: 40px;
+  }
+  
+  .basins, .class-list, .testimonials, .benefits, .contact {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .basins ul, .benefits ul {
+    padding-left: 20px;
+  }
+  
+  .class-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .class-card {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .class-card h3 {
+    font-size: 1.6rem;
+    color: #4caf50;;
+  }
+  
+  .class-card p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .class-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .class-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .people-count {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4caf50;;
+  }
+  
+  .testimonial {
+    margin-bottom: 20px;
+    font-style: italic;
+    color: #555;
+  }
+  
+  .testimonial strong {
+    color: #4caf50;;
+  }
+  
+  .contact button {
+    padding: 12px 30px;
+    background-color: #4caf50;;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+  }
+  
+  .contact button:hover {
+    background-color: #0056b3;
+  }
+  
+  .pool-feature {
+    font-style: italic;
+    color: #555;
+    margin-top: 15px;
+  }
+
+/* Mon Profil Page styles */
+.page.monprofil-page {
+    font-family: 'Arial', sans-serif;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile-header h2 {
+    font-size: 3rem;
+    color: #4caf50;
+  }
+  
+  .profile-header p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  .profile-info, .performances, .courses, .cool-options {
+    margin-top: 40px;
+  }
+  
+  h3 {
+    font-size: 2rem;
+    color: #4caf50;
+    margin-bottom: 15px;
+  }
+  
+  .profile-details {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-photo {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  .profile-photo h4 {
+    font-size: 1.5rem;
+    color: #4caf50;;
+  }
+  
+  .profile-img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .upload-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #4caf50;;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .upload-btn:hover {
+    background-color: #4caf50;;
+  }
+  
+  .performances, .courses, .cool-options {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .course-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .course-list li {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+  
+  .course-list .completed {
+    color: green;
+  }
+  
+  .course-list .in-progress {
+    color: orange;
+  }
+  
+  .update-performance-btn, .add-course-btn, .option-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .update-performance-btn:hover, .add-course-btn:hover, .option-btn:hover {
+    background-color: #4caf50;;
+  }
+
+  /* Register Page Styles */
+.register-page {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .profile-header h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #e84d2a;
+    margin-bottom: 10px;
+  }
+  
+  .profile-header p {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 300;
+  }
+  
+  .form-section {
+    background-color: #707070;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adds space between form groups */
+  }
+  
+  .form-group {
+    margin-bottom: 20px; /* Increases the space between input groups */
+  }
+  
+  .form-group label {
+    font-size: 1.1rem;
+    font-weight: bold; /* Makes label text bold */
+    color: #333;
+    margin-bottom: 8px; /* Adds space between label and input */
+  }
+  
+  .input-field {
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #e84d2a;
+    background-color: #e3f2fd;
+  }
+  
+  .submit-btn {
+    padding: 15px 30px;
+    background-color: #e84d2a;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    text-transform: uppercase;
+  }
+  
+  .submit-btn:hover {
+    background-color: #6d1600;
+    transform: translateY(-5px);
+  }
+  
+  .message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  
+  .message.success {
+    color: #2a9d8f;
+  }
+  
+  .message.error {
+    color: #e84d2a;
+  }
+
+/* Login Page Styles */
+.login-page {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .profile-header {
+    text-align: center;
+    
+  }
+  
+  .profile-header h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #e84d2a;
+    margin-bottom: 10px;
+  }
+  
+  .profile-header p {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 300;
+  }
+  
+  .login-link {
+    display: block;
+    font-size: 1.1rem;
+    color: #e84d2a; /* Updated color */
+    text-decoration: none;
+    margin: 10px 0;
+  }
+  
+  .login-link:hover {
+    text-decoration: underline;
+    color: #b23e1e; /* Darker shade on hover for better contrast */
+  }
+
+  /* General styles for Admin Page */
+.admin-page {
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-header h2 {
+    font-size: 2rem;
+    color: #e84d2a;
+  }
+  
+  .profile-header p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .admin-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-generate-code {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #e84d2a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+  }
+  
+  .btn-generate-code:hover {
+    background-color: #d84315;
+    transform: scale(1.05);
+  }
+  
+  .message {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .code-display {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px solid #e84d2a;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+  }
+  
+  .code-display p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e84d2a;
+  }
+  
+  
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background: #333;
+    color: white;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.footer a {
+    color: #4caf50;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .coach-list {
+        flex-direction: column;
+    }
+
+    .coach {
+        flex: 1 1 100%;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}
