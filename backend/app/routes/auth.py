@@ -70,18 +70,4 @@ def logout():
 def me():
     return jsonify(current_user.to_dict())
 
-# --- Décorateur pour accès admin ---
-def admin_required(f):
-    @login_required
-    def wrapper(*args, **kwargs):
-        if not current_user.is_admin:
-            return jsonify({'error': 'Acces admin requis'}), 403
-        return f(*args, **kwargs)
-    wrapper.__name__ = f.__name__
-    return wrapper
 
-# Exemple de route protégée admin :
-@auth_bp.route('/admin-only', methods=['GET'])
-@admin_required
-def admin_only():
-    return jsonify({'message': 'Bienvenue admin !'})

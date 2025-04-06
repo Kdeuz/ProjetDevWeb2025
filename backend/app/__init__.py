@@ -20,8 +20,11 @@ def create_app():
 
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
+    from app.routes.performances import performance_bp
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(performance_bp)
 
     @login_manager.user_loader
     def load_user(user_id):
