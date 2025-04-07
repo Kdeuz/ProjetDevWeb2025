@@ -58,6 +58,12 @@ function App() {
                 </li>
               </>
             )}
+
+            {userData && userData.is_admin && (
+              // Afficher "Admin" si l'utilisateur est un administrateur
+              <li><Link to="/admin">Admin</Link></li>
+            )}
+            
           </ul>
         </nav>
 
