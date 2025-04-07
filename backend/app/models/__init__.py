@@ -3,6 +3,7 @@ from .user import User
 from .machine import Machine
 from .codeperf import CodePerformance 
 from .performance import Performance
+from .codebase import CodeBase
 from .bassin import Bassin
 from .ligne import Ligne
 from .coach import Coach

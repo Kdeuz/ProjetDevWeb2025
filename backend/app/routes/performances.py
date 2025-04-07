@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app import db
 from flask_login import login_required, current_user
-from ..models import CodePerformance, Machine, Performance
+from ..models import CodePerformance, Machine, Performance, CodeBase
 from datetime import datetime, timedelta
 import random
 
@@ -44,7 +44,7 @@ def generate_code_perf():
     if not machine:
         return jsonify({'error': 'Machine introuvable'}), 404
 
-    code = CodePerformance.generate_unique_code()
+    code = CodeBase.generate_unique_code()
 
     new_code = CodePerformance(
         code=code,
@@ -69,25 +69,12 @@ def submit_performance():
     data = request.json
     code_input = data.get('code')
 
-    if not code_input:
-        return jsonify({'error': 'Code requis'}), 400
-
     code_perf = CodePerformance.query.filter_by(code=code_input, utilisé=False).first()
 
     if not code_perf:
-        return jsonify({'error': 'Code invalide ou déjà utilisé'}), 404
-
-    if code_perf.is_expired():
-        return jsonify({'error': 'Code expiré'}), 410
+        return jsonify({'error': 'Code invalide'}), 404
 
     machine = code_perf.machine
-    if not machine:
-        return jsonify({'error': 'Machine non trouvée'}), 404
-
-    # Marquer le code comme utilisé
-    code_perf.utilisé = True
-
-    # Génération aléatoire d'une performance fictive
     reps = random.randint(6, 15)
     poids = random.choice([20, 30, 40, 50, 60, 70, 80])
 
@@ -99,6 +86,7 @@ def submit_performance():
         date=datetime.utcnow()
     )
 
+    code_perf.utilisé = True
     db.session.add(performance)
     db.session.commit()
 
