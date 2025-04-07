@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import './App.css';
 
@@ -13,6 +13,22 @@ import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 
 function App() {
+  const [userData, setUserData] = useState(null);
+
+  // Charger les données utilisateur depuis le localStorage au démarrage
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
+  }, []);
+
+  // Fonction pour gérer la déconnexion
+  const handleLogout = () => {
+    setUserData(null);
+    localStorage.removeItem("userData");
+  };
+
   return (
     <Router>
       <div className="App">
@@ -27,15 +43,28 @@ function App() {
         {/* Barre de navigation */}
         <nav className="navbar">
           <ul>
-          <li><Link to="/">Accueil</Link></li>
-          <br />
-            <li><Link to="/login">Connexion</Link></li>
+            <li><Link to="/">Accueil</Link></li>
+            {!userData ? (
+              // Afficher "Connexion" si l'utilisateur n'est pas connecté
+              <li><Link to="/login">Connexion</Link></li>
+            ) : (
+              // Afficher "Mon Profil" et "Déconnexion" si l'utilisateur est connecté
+              <>
+                <li><Link to="/monprofil">Mon Profil</Link></li>
+                <li>
+                  <Link to="/" onClick={handleLogout} className="logout-btn">
+                    Déconnexion
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
 
         {/* Contenu principal */}
         <main>
           <Routes>
+            {/* Page d'accueil */}
             <Route path="/" element={(
               <div className="accueil">
                 {/* Section 1 : Bienvenue */}
@@ -97,7 +126,7 @@ function App() {
 
             {/* Pages Authentification */}
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage userData={userData} setUserData={setUserData} />} />
             <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </main>
