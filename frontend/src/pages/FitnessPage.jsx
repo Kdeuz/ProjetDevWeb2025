@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+import { Link } from "react-router-dom";
 
 const FitnessPage = () => {
     const [peopleCount, setPeopleCount] = useState(20);
@@ -150,7 +151,7 @@ const FitnessPage = () => {
                     <li>Réductions sur les événements spéciaux</li>
                     <li>Coaching personnalisé disponible</li>
                 </ul>
-                <button className="join-button">S'inscrire Maintenant</button>
+                <Link to="/register" className="join-button">Inscrivez-vous !</Link>
             </section>
 
             <section className="newsletter">

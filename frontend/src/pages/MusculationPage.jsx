@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './style.css';
+import { Link } from "react-router-dom";
 
 const MusculationPage = () => {
     const [equipmentAvailable, setEquipmentAvailable] = useState({
@@ -140,7 +141,7 @@ const MusculationPage = () => {
                     Rejoignez-nous et bénéficiez d'un accès illimité à nos installations modernes, avec des coachs expérimentés pour vous
                     guider à chaque étape.
                 </p>
-                <button className="join-button">Inscription</button>
+                <Link to="/register" className="join-button">Inscription</Link>
             </section>
 
             {/* Newsletter Section */}

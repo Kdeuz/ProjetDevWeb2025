@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import { Link } from "react-router-dom";
 
 const PiscinePage = () => {
   return (
@@ -80,7 +81,7 @@ const PiscinePage = () => {
       <section className="contact">
         <h2>Contactez-Nous</h2>
         <p>Vous avez des questions sur nos services aquatiques ? Contactez notre équipe pour plus d'informations !</p>
-        <button className="class-btn">Nous contacter</button>
+        <Link to="/contact" className="join-button">Nous contacter</Link>
       </section>
     </div>
   );
