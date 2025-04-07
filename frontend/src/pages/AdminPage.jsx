@@ -3,11 +3,26 @@ import './style.css';  // Assurez-vous d'importer les styles CSS ici
 
 // Fonction pour appeler l'API Flask et générer un code
 async function generateCode() {
-  // Envoie une requête POST à l'API pour générer un code
-  const res = await fetch("http://localhost:5000/admin/generate_code", {
-    method: "POST",
-  });
-  return res.json(); // Retourne la réponse sous forme JSON
+  try {
+    const res = await fetch("http://localhost:5000/admin/generate_code", {
+      method: "POST",
+      credentials: "include", // Inclure les cookies pour l'authentification
+    });
+
+    // Vérifiez si la réponse est correcte
+    if (!res.ok) {
+      const errorText = await res.text(); // Lire la réponse brute
+      console.error("Réponse brute :", errorText); // Afficher la réponse brute pour déboguer
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+
+    const data = await res.json(); // Convertir la réponse en JSON
+    console.log("Réponse de l'API :", data); // Afficher la réponse brute pour déboguer
+    return data; // Retourner les données JSON
+  } catch (error) {
+    console.error("Erreur lors de l'appel à l'API :", error);
+    return { error: error.message || "Impossible de générer le code. Veuillez réessayer." };
+  }
 }
 
 export default function AdminPage() {
@@ -17,13 +32,15 @@ export default function AdminPage() {
 
   // Fonction qui sera appelée lorsque l'on clique sur le bouton pour générer le code
   const handleGenerateCode = async () => {
-    setMessage("Génération en cours...");  // Affiche un message de génération en cours
-    const result = await generateCode(); // Attendre la réponse de l'API
-    if (result.message) {
-      setMessage(`Code généré avec succès`); // Si la génération réussit, afficher un message de succès
-      setCode(result.code);  // Sauvegarder le code généré dans l'état
+    setMessage("Génération en cours...");
+    const result = await generateCode(); // Appeler la fonction pour générer le code
+    console.log("Résultat de l'API :", result); // Afficher le résultat pour déboguer
+
+    if (result.code) {
+      setMessage("✅ Code généré avec succès !");
+      setCode(result.code);
     } else {
-      setMessage(`Erreur : ${result.error}`); // Si erreur, afficher un message d'erreur
+      setMessage(`❌ Erreur : ${result.error || "Une erreur est survenue."}`);
     }
   };
 

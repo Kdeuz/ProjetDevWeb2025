@@ -13,7 +13,9 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    CORS(app)
+    # Configuration CORS
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
+
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
@@ -31,5 +33,9 @@ def create_app():
     def load_user(user_id):
         from app.models import User  
         return User.query.get(int(user_id))
+
+    @login_manager.unauthorized_handler #Vérifier que l'utilisateur est connecté, sinon flask-login envoie cette erreur avant
+    def unauthorized():
+        return jsonify({"error": "Vous devez être connecté pour accéder à cette ressource"}), 401
 
     return app
