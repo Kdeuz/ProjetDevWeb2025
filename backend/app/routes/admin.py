@@ -10,26 +10,17 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/admin/generate_code', methods=['POST'])
 @login_required
 def generate_code():
+    #if not current_user.is_admin:
+        #return jsonify({"error": "Vous devez être administrateur pour générer un code"}), 403
 
+    # Générer un code d'inscription à 6 chiffres
+    code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
 
-    if not current_user.is_admin:
-        print("Erreur : utilisateur non administrateur")
-        return jsonify({"error": "Vous devez être administrateur pour générer un code"}), 403
+    new_code = CodeInscription(code=code)
+    db.session.add(new_code)
+    db.session.commit()
 
-    try:
-        # Générer un code d'inscription à 6 chiffres
-        code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
-        print(f"Code généré : {code}")
-
-        new_code = CodeInscription(code=code)
-        db.session.add(new_code)
-        db.session.commit()
-        print("Code enregistré dans la base de données")
-
-        return jsonify({"message": "Code généré", "code": code}), 200
-    except Exception as e:
-        print(f"Erreur lors de la génération du code : {e}")
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"message": "Code généré", "code": code})
 
 
 # Route pour voir les codes disponibles (non utilisés)
