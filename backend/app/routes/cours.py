@@ -38,6 +38,7 @@ def add_ligne():
             exit = True
         else:
             self.ajouter_ligne(ligne)
+    return jsonify({'message' : 'Ligne(s) ajoutée(s)'})
         
     
 
