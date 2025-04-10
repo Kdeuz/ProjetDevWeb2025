@@ -39,7 +39,7 @@ class Cours(db.Model):
     # Relations
     coachs = db.relationship('Coach', secondary=cours_coach, backref='cours', lazy=True)
     lignes = db.relationship('Ligne', secondary=cours_ligne, backref='cours', lazy=True)
-    salle_fitness = db.relationship('Salle Fitness', secondary=cours_salle_fitness, backref='cours', lazy=True)
+    salle_fitness = db.relationship('Salle Fitness', secondary=cours_salle, backref='cours', lazy=True)
 
     def __init__(self, nom, date, heure_debut, heure_fin, description, capacite_max):
         self.nom = nom

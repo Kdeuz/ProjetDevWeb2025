@@ -11,6 +11,7 @@ import MonProfilPage from './pages/MonProfilPage';
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
+import InscriptionCoursPage from "./pages/InscriptionCoursPage";
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -129,6 +130,7 @@ function App() {
             <Route path="/piscine" element={<PiscinePage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/monprofil" element={<MonProfilPage />} />
+            <Route path="/inscriptioncours" element={<InscriptionCoursPage />} />
 
             {/* Pages Authentification */}
             <Route path="/register" element={<RegisterPage />} />
