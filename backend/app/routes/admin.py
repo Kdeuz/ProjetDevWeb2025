@@ -10,10 +10,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/admin/generate_code', methods=['POST'])
 @login_required
 def generate_code():
-    print(f"Utilisateur connecté : {current_user}")
-    if not current_user.is_authenticated:
-        print("Erreur : utilisateur non authentifié")
-        return jsonify({"error": "Vous devez être connecté pour accéder à cette ressource"}), 401
+
 
     if not current_user.is_admin:
         print("Erreur : utilisateur non administrateur")
