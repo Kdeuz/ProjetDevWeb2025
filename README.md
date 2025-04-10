@@ -8,7 +8,7 @@ This is a web development project that uses **React** for the frontend and **Fla
 
 ---
 
-Admin : test@mail.com  ----- 123456
+Admin : nouveau@mail.com  ----- supersecret
 
 
 ## Structure du projet / Project Structure
