@@ -1,8 +1,8 @@
 from datetime import time
 from flask_sqlalchemy import SQLAlchemy
 from app import db
+from flask import jsonify
 
-db = SQLAlchemy()
 
 # Table d'association pour la relation many-to-many entre Cours et Coach
 cours_coach = db.Table('cours_coach',
@@ -14,6 +14,11 @@ cours_coach = db.Table('cours_coach',
 cours_ligne = db.Table('cours_ligne',
     db.Column('cours_id', db.Integer, db.ForeignKey('cours.id'), primary_key=True),
     db.Column('ligne_id', db.Integer, db.ForeignKey('lignes.id'), primary_key=True)
+)
+
+cours_user = db.Table('cours_user',
+    db.Column('cours_id', db.Integer, db.ForeignKey('cours.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
 )
 
 class Cours(db.Model):
@@ -30,19 +35,20 @@ class Cours(db.Model):
     heure_fin = db.Column(db.Time, nullable=False)
     description = db.Column(db.Text)
     capacite_max = db.Column(db.Integer)
-    type_cours = db.Column(db.String(50))  # "natation", "fitness", etc.
     salle_fitness_id = db.Column(db.Integer, db.ForeignKey('salles_fitness.id'))
     
     # Relations
     coachs = db.relationship('Coach', secondary=cours_coach, backref='cours', lazy=True)
     lignes = db.relationship('Ligne', secondary=cours_ligne, backref='cours', lazy=True)
-    
-    def __init__(self, nom, date, heure_debut, heure_fin, type_cours, **kwargs):
+    user = db.relationship('User', secondary=cours_user, backref='cours', lazy=True)
+
+    def __init__(self, nom, date, heure_debut, heure_fin, description, capacite_max):
         self.nom = nom
         self.date = date
         self.heure_debut = heure_debut
         self.heure_fin = heure_fin
-        self.type_cours = type_cours
+        self.description = description
+        self.capacite_max = capacite_max
         for key, value in kwargs.items():
             setattr(self, key, value)
     
@@ -56,10 +62,20 @@ class Cours(db.Model):
         if ligne not in self.lignes:
             self.lignes.append(ligne)
     
-    def definir_salle_fitness(self, salle):
+    def ajout_salle_fitness(self, salle):
         """Définit la salle de fitness pour ce cours"""
-        self.salle_fitness_id = salle.id
-        self.type_cours = "fitness"  # On force le type
+        if self.salle_fitness is None:
+            self.salle_fitness_id = salle.id
+            return jsonify({'message','ajout salle fitness validé'}), 201
+        else:
+            return jsonify({'error','Ajout impossible'}), 400
+            
+    def ajout_user(self, user):
+        """" Ajoute un user au cours"""
+        if (user not in self.user) and (len(self.user) < self.capacite_max) :
+            self.user.append(user)
+            return jsonify({'message':'ajout user validé'}), 201
+        return jsonify({'error':'Ajout impossible'}), 400
     
     def to_dict(self):
         """Sérialisation en dictionnaire pour JSON"""

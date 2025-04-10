@@ -10,7 +10,7 @@ def add_cours():
     if not current_user.is_admin:
         return jsonify({'error': 'Accès refusé : administrateur uniquement'}), 403
 
-    data = request.json
+    data = request.json 
 
     nom = data.get("Nom")
     date = data.get("Date")
@@ -43,3 +43,21 @@ def add_ligne():
             self.ajouter_ligne(ligne)
     db.session.commit()
     return jsonify({'message' : 'Ligne(s) ajoutée(s)'})
+
+@cours_bp.route('/add_user', methods=['POST'])
+@login_required
+def add_user():
+    if not current_user.is_admin:
+        return jsonify({'error': 'Accès refusé : administrateur uniquement'}), 403
+    
+    data = request.json
+    exit = False
+    while not exit:
+
+        user = data.get("User ou FIN pour terminer")
+        if user == "FIN":
+            exit = True
+        else:
+            cours.ajout_user(user)
+    db.session.commit()
+    return jsonify({'message':'ajout(s) terminé(s)'}), 201

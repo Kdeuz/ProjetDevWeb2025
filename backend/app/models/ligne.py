@@ -2,8 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from app import db
 
-db = SQLAlchemy()
-bcrypt = Bcrypt()
+
 
 class Ligne(db.Model):
     """
