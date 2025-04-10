@@ -22,7 +22,10 @@ def add_cours():
     if not nom or not date or not heure_debut or not heure_fin or not capacite_max or not type_cours :
         return jsonify({'error': 'Nom et description requis'}), 400
     
-    return jsonify({'message' : 'Cours créé avec succès', 'cours' : {'id' : cours.id}})
+    new_cours = Cours(nom, date, heure_debut, heure_fin, description, capacite_max)
+    db.session.add(new_cours)
+    db.session.commit()
+    return jsonify({'message' : 'Cours créé avec succès', 'cours' : {'id' : cours.id}}), 201
 
 @cours_bp.route('/add_cours', methods=['POST'])
 @login_required
@@ -38,7 +41,9 @@ def add_ligne():
             exit = True
         else:
             self.ajouter_ligne(ligne)
+    db.session.commit()
     return jsonify({'message' : 'Ligne(s) ajoutée(s)'})
+
         
     
 
