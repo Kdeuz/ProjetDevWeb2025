@@ -22,10 +22,15 @@ def create_app():
     from app.routes.admin import admin_bp
     from app.routes.performances import performance_bp
     from app.routes.validation import validation_bp
+    from app.routes.cours import cours_bp
+    from app.routes.coach import coach_bp
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(performance_bp)
     app.register_blueprint(validation_bp)
+    app.register_blueprint(cours_bp)
+    app.register_blueprint(coach_bp)
 
     @login_manager.user_loader
     def load_user(user_id):

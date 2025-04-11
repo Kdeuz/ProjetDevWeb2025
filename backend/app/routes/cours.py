@@ -61,3 +61,62 @@ def add_user():
             cours.ajout_user(user)
     db.session.commit()
     return jsonify({'message':'ajout(s) terminé(s)'}), 201
+
+@cours_bp.route('/remove_cours/<int:cours_id>', methods=['DELETE'])
+@login_required
+def remove_cours(cours_id):
+    if not current_user.is_admin:
+        return jsonify({'error': 'Accès refusé : administrateur uniquement'}), 403
+
+    cours = Cours.query.get(cours_id)
+    if not cours:
+        return jsonify({'error': 'Cours non trouvé'}), 404
+
+    try:
+        # Suppression automatique des relations many-to-many grâce à SQLAlchemy
+        db.session.delete(cours)
+        db.session.commit()
+        return jsonify({
+            'message': 'Cours supprimé avec succès',
+            'deleted_id': cours_id,
+            'details': {
+                'nom': cours.nom,
+                'date': cours.date.isoformat()
+            }
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'error': 'Erreur lors de la suppression',
+            'details': str(e)
+        }), 500
+
+@cours_bp.route('/remove_user/<int:cours_id>/<int:user_id>', methods=['DELETE'])
+@login_required
+def remove_user(cours_id, user_id):
+    cours = Cours.query.get(cours_id)
+    if not cours:
+        return jsonify({'error': 'Cours non trouvé'}), 404
+
+    # Vérification si l'utilisateur est admin OU le user concerné
+    if not (current_user.is_admin or current_user.id == user_id):
+        return jsonify({'error': 'Permission refusée'}), 403
+
+    user = next((u for u in cours.user if u.id == user_id), None)
+    if not user:
+        return jsonify({'error': 'Utilisateur non inscrit à ce cours'}), 404
+
+    try:
+        cours.user.remove(user)
+        db.session.commit()
+        return jsonify({
+            'message': 'Utilisateur désinscrit',
+            'details': {
+                'cours_id': cours_id,
+                'user_id': user_id,
+                'places_restantes': cours.capacite_max - len(cours.user)
+            }
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
