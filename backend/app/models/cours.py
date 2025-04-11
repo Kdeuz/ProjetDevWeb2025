@@ -13,12 +13,12 @@ cours_coach = db.Table('cours_coach',
 # Table d'association pour la relation many-to-many entre Cours et Ligne
 cours_ligne = db.Table('cours_ligne',
     db.Column('cours_id', db.Integer, db.ForeignKey('cours.id'), primary_key=True),
-    db.Column('ligne_id', db.Integer, db.ForeignKey('lignes.id'), primary_key=True)
+    db.Column('ligne_id', db.Integer, db.ForeignKey('ligne.id'), primary_key=True)  # Corrected ForeignKey
 )
 
 cours_user = db.Table('cours_user',
     db.Column('cours_id', db.Integer, db.ForeignKey('cours.id'), primary_key=True),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
 )
 
 class Cours(db.Model):
@@ -66,9 +66,9 @@ class Cours(db.Model):
         """Définit la salle de fitness pour ce cours"""
         if self.salle_fitness is None:
             self.salle_fitness_id = salle.id
-            return jsonify({'message','ajout salle fitness validé'}), 201
+            return jsonify({'message':'ajout salle fitness validé'}), 201
         else:
-            return jsonify({'error','Ajout impossible'}), 400
+            return jsonify({'error':'Ajout impossible'}), 400
             
     def ajout_user(self, user):
         """" Ajoute un user au cours"""
@@ -92,5 +92,6 @@ class Cours(db.Model):
             'lignes': [ligne.to_dict() for ligne in self.lignes],
             'salle_fitness_id': self.salle_fitness_id
         }
+
 
 

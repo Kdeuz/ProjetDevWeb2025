@@ -8,4 +8,5 @@ from .bassin import Bassin
 from .ligne import Ligne
 from .coach import Coach
 from .cours import Cours
+from .salle import SalleFitness 
 

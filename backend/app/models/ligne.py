@@ -13,7 +13,7 @@ class Ligne(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     numero = db.Column(db.Integer, nullable=False)
     longueur = db.Column(db.Float, nullable=False)  # en mètres
-    bassin_id = db.Column(db.Integer, db.ForeignKey('bassins.id'), nullable=False)
+    bassin_id = db.Column(db.Integer, db.ForeignKey('bassin.id'), nullable=False)
     
     def __init__(self, numero, longueur, bassin_id):
         self.numero = numero
