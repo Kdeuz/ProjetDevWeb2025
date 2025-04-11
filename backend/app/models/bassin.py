@@ -12,12 +12,16 @@ class Bassin(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(100), nullable=False, unique=True)
+    capacite_max = db.Column(db.Integer)
     
     # Relation one-to-many avec les lignes
     lignes = db.relationship('Ligne', backref='bassin', lazy=True, cascade='all, delete-orphan')
+
+    users = db.relationship('User', backref='bassin', lazy=True, cascade='all, delete-orphan')
     
-    def __init__(self, nom):
+    def __init__(self, nom, capacite):
         self.nom = nom
+        self.capacite_max = capacite_max
     
     def ajouter_ligne(self, numero, longueur):
         """Méthode pour ajouter une ligne à ce bassin"""
@@ -38,6 +42,7 @@ class Bassin(db.Model):
         return {
             'id': self.id,
             'nom': self.nom,
+            'capacite_max' : self.capacite_max,
             'nombre_lignes': self.nombre_lignes(),
             'lignes': [ligne.to_dict() for ligne in self.lignes]
         }
