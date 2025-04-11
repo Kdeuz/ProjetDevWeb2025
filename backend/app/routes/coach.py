@@ -4,7 +4,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 coach_bp = Blueprint('coach', __name__)
 
-@coach_bp.route('add_coach', methods=['POST'])
+@coach_bp.route('/add_coach', methods=['POST'])
 @login_required
 def add_coach():
     if not current_user.is_admin:
