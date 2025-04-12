@@ -1,7 +1,7 @@
 from app import db
 from datetime import time
 from app.models.PageFitness import Coach, CoursFitness, FitnessStatus
-
+from app.models.user import User
 def init_database():
     """Initialize the database with sample data"""
     db.drop_all()  # Drop all tables
@@ -12,6 +12,7 @@ def init_database():
         db.session.query(Coach).delete()
         db.session.query(CoursFitness).delete()
         db.session.query(FitnessStatus).delete()
+        db.session.query(User).delete()  # Clear existing users
 
         # Define and add coaches
         coaches = [
@@ -60,9 +61,34 @@ def init_database():
         # Initialize fitness status
         db.session.add(FitnessStatus(personnes=20))
 
+        # Define users (without 'password' in constructor)
+        users = [
+            {"email": "admin@exemple.com", "username": "admin-1", "is_admin": True, "prenom": "AdminFirst", "nom": "AdminLast", "age": 35, "telephone": "9876543210", "password": "adminpassword"},
+            {"email": "user@exemple.com", "username": "user-1", "is_admin": False, "prenom": "user", "nom": "1", "age": 20, "telephone": "123456789", "password": "userpassword"},
+            {"email": "user2@exemple.com", "username": "user2", "is_admin": False, "prenom": "user2", "nom": "user2", "age": 22, "telephone": "222222222", "password": "user2password"},
+            {"email": "user3@exemple.com", "username": "user3", "is_admin": False, "prenom": "user3", "nom": "user3", "age": 33, "telephone": "123456", "password": "user3password"}
+        ]
+
+        # Add users to the database and hash their passwords
+        for user_data in users:
+            user = User(
+                email=user_data["email"],
+                username=user_data["username"],
+                is_admin=user_data["is_admin"],
+                prenom=user_data["prenom"],
+                nom=user_data["nom"],
+                age=user_data["age"],
+                telephone=user_data["telephone"]
+            )
+            user.set_password(user_data["password"])  # Hash the password using set_password
+            db.session.add(user)
+
+        # Commit the users to the database
         db.session.commit()
+
         print("Database initialized successfully!")
     except Exception as e:
         db.session.rollback()
         print(f"Error initializing database: {str(e)}")
         raise
+
