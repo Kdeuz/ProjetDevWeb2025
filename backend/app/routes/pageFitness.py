@@ -22,7 +22,6 @@ def get_all_fitness_data():
     # 2. Récupération des cours avec coach et participants
     cours = CoursFitness.query.options(
         joinedload(CoursFitness.coach),
-        joinedload(CoursFitness.participants)
     ).order_by(CoursFitness.jour, CoursFitness.heure).all()
 
     cours_data = []

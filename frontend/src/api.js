@@ -59,9 +59,22 @@ export const getTemoignages = async () => {
 };
 
 export const getFitnessData = async () => {
-  const response = await fetch('/api/fitness'); // 
+  const response = await fetch('http://localhost:5000/api/fitness-data');
+  
   if (!response.ok) {
     throw new Error('Erreur de récupération des données fitness');
   }
-  return await response.json(); // doit contenir { mockCoachs, mockCours, interval }
+  
+  const data = await response.json(); // Parses the response JSON
+  
+  // Destructuring the relevant data from the response
+  const { coachs, cours, stats, metadata } = data;
+
+  return {
+    mockCoachs: coachs,
+    mockCours: cours,
+    interval: stats.personnes,
+    metadata: metadata // Contains last_updated and version
+  };
 };
+

@@ -3,86 +3,40 @@ import './style.css';
 import { Link } from "react-router-dom";
 import { getFitnessData } from '../api';
 
-
 const FitnessPage = () => {
     const [peopleCount, setPeopleCount] = useState(0);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [coachs, setCoachs] = useState([]);
     const [cours, setCours] = useState([]);
+    const [loading, setLoading] = useState(true); // Loading state to manage data fetching state
+    const [error, setError] = useState(null); // Error state to handle errors during data fetch
 
-/*   useEffect(() => {
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getFitnessData();
+                console.log('Fetched data:', data);  // Log fetched data for debugging
 
-// Simule des données de coachs (à remplacer par appel backend)
-        const mockCoachs = [
-            {
-                id: 1,
-                nom: "Silvester Stallone",
-                description: "Expert en musculation et nutrition. Jean vous aidera à construire votre force et à optimiser votre alimentation."
-            },
-            {
-                id: 2,
-                nom: "Marie Curie",
-                description: "Spécialiste en yoga et bien-être. Marie vous guidera vers un équilibre parfait entre corps et esprit."
-            },
-            {
-                id: 3,
-                nom: "Paul Martin",
-                description: "Coach cardio et endurance. Avec Paul, améliorez votre condition physique et repoussez vos limites."
-            },
-            {
-                id: 4,
-                nom: "Emma Bernard",
-                description: "Instructrice de Pilates et stretching. Emma vous aidera à renforcer votre corps tout en améliorant votre souplesse."
+                // Ensure proper structure of data before setting state
+                setCoachs(data.mockCoachs || []);
+                setCours(data.mockCours || []);
+                setPeopleCount(data.interval || 0);  // Corrected to match the correct data key
+                setLoading(false);  // Data is loaded, stop the loading state
+            } catch (error) {
+                console.error("Erreur de chargement des données fitness :", error);
+                setError("Erreur de chargement des données.");  // Set error message
+                setLoading(false);  // Stop loading even on error
             }
-        ];
-        setCoachs(mockCoachs);
-    }, []);
+        };
 
-    // Simule des données de planning de cours
-    useEffect(() => {
-        const mockCours = [
-            { id: 1, jour: "Lundi", heure: "18:00", activite: "Yoga" },
-            { id: 2, jour: "Mardi", heure: "19:00", activite: "Cardio" },
-            { id: 3, jour: "Mercredi", heure: "20:00", activite: "Musculation" },
-            { id: 4, jour: "Jeudi", heure: "18:30", activite: "HIIT" },
-            { id: 5, jour: "Vendredi", heure: "19:00", activite: "Pilates" },
-            { id: 6, jour: "Samedi", heure: "10:00", activite: "Bootcamp" },
-            { id: 7, jour: "Dimanche", heure: "11:00", activite: "Méditation" }
-        ];
-        setCours(mockCours);
-    }, []);
-    // Simule une fluctuation du nombre de personnes en salle
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setPeopleCount((prevCount) => Math.max(10, prevCount + Math.floor(Math.random() * 5 - 2)));
-        }, 3000);
+        fetchData();  // Initial fetch
 
-        // TODO: Remplacer ce comportement par une valeur récupérée via une API réelle si besoin
+        const interval = setInterval(fetchData, 3000); // Fetch data every 3 seconds to keep it updated in real time
+
+        // Clean up the interval when component unmounts
         return () => clearInterval(interval);
-    }, []);
-*/
-
-//On commence par récupérer les données de l'API
-// On utilise useEffect pour charger les données au démarrage du composant
-
-useEffect(() => {
-    const fetchData = async () => {
-        try {
-            const data = await getFitnessData();
-            setCoachs(data.coachs || []);
-            setCours(data.cours || []);
-            setPeopleCount(data.stats?.total_participants || 0);
-        } catch (error) {
-            console.error("Erreur de chargement des données fitness :", error);
-        }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 3000); // Mise à jour toutes les 3s
-
-    return () => clearInterval(interval);
-}, []);
+    }, []); // Empty dependency array ensures this effect runs once when the component mounts
 
     const handleNewsletterSubmit = (e) => {
         e.preventDefault();
@@ -90,14 +44,6 @@ useEffect(() => {
             setIsSubscribed(true);
         }
     };
-
-    
-
-
-
-
-
-
 
     return (
         <div className="page fitness-page">
@@ -121,13 +67,19 @@ useEffect(() => {
                 <h2>Nos Coachs</h2>
                 <p>Rencontrez notre équipe de coachs passionnés et expérimentés, prêts à vous guider à chaque étape de votre parcours.</p>
                 <div className="coach-list">
-                    {coachs.map((coach) => (
-                        <div className="coach" key={coach.id}>
-                            <span className="coach-icon">👤</span>
-                            <h3>{coach.nom_complet}</h3>
-                            <p>{coach.description}</p>
-                        </div>
-                    ))}
+                    {loading ? (
+                        <p>Chargement des coachs...</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : (
+                        coachs.map((coach) => (
+                            <div className="coach" key={coach.id}>
+                                <span className="coach-icon">👤</span>
+                                <h3>{coach.nom_complet}</h3>
+                                <p>{coach.description}</p>
+                            </div>
+                        ))
+                    )}
                 </div>
             </section>
 
@@ -143,13 +95,19 @@ useEffect(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        {cours.map((cours) => (
-                            <tr key={cours.id}>
-                                <td>{cours.jour}</td>
-                                <td>{cours.heure}</td>
-                                <td>{cours.activite}</td>
-                            </tr>
-                        ))}
+                        {loading ? (
+                            <tr><td colSpan="3">Chargement des cours...</td></tr>
+                        ) : error ? (
+                            <tr><td colSpan="3">{error}</td></tr>
+                        ) : (
+                            cours.map((coursItem) => (
+                                <tr key={coursItem.id}>
+                                    <td>{coursItem.jour}</td>
+                                    <td>{coursItem.heure}</td>
+                                    <td>{coursItem.activite}</td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </section>
@@ -211,4 +169,5 @@ useEffect(() => {
         </div>
     );
 };
+
 export default FitnessPage;
