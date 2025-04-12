@@ -83,6 +83,52 @@ def init_database():
             user.set_password(user_data["password"])  # Hash the password using set_password
             db.session.add(user)
 
+        bassins = [
+            {"nom" : "Fosse", "description" : "Un bassin de plongé de 25 mètres de profondeur sublimé par un décor magnifique", "longueur" : 20.0, "profondeur" : 25.0},
+            {"nom" : "Normal", "description" : "Un bassin de 25 mètres et 4 lignes", "longueur" : 25.0, "profondeur" : 2.0},
+            {"nom" : "Olympique", "description" : "Un bassin de 50 mètres et 10 lignes", "longueur" : 50.0, "profondeur" : 3.0}
+
+        ]
+        
+        coursPiscines = [
+            {"nom" : "Aquagym", "description" : "Venez vous dépenser dans ce cours d'aquagym, idéal pour le maintient de la forme !", "jour" : "Lundi", "heure" : time(18,0), "niveau" : "débutant"},
+            {"nom" : "J'apprend à nager", "description" : "A tout âge, rejoigné nous et apprener l'aisance aquatique", "jour" : "Mardi", "heure" : time(12,30), "niveau" : "débutant"}, 
+            {"nom" : "Natation course", "description" : "Developper votre vitesse et endurance", "jour" : "Mercredi", "heure" : time(14,0), "niveau" : "expert"},
+            {"nom" : "Natation adulte", "description" : "Faite perdurer le plaisir de la natation", "jour" : "Jeudi", "heure" : time(17,30), "niveau" : "intermédiare"},
+            {"nom" : "Réveil aquatique", "description" : "Reveillee vous de bon matin, à la fraiche", "jour" : "Vendredi", "heure" : time(6,30), "niveau" : "intermédiaire"},
+            {"nom" : "Neaucture", "description" : "Detendez vous dans notre fosse au travers de l'apnée", "jour" : "Vendredi", "heure" : time(21,15), "niveau" : "débutant - expert", },       
+        ]
+
+        status = [
+            {"bassin1" : 10, "bassin2" : 10, "bassin3" : 10}
+        ]
+        
+        for bassin in bassins:
+            db.session.add(Bassin(**bassin))
+        for cours in coursPiscines:
+            db.session.add(CoursPiscine(**cours))
+        for s in status:
+            db.session.add(PiscineStatus(**s))
+
+        # --- Programmes de musculation
+        programmes = [
+            {"titre": "Force maximale", "description": "Développement de la force brute via des charges lourdes."},
+            {"titre": "Prise de masse", "description": "Programme pour développer un volume musculaire massif."},
+            {"titre": "Endurance musculaire", "description": "Série longue et répétitions pour renforcer l'endurance."},
+        ]
+        for prog in programmes:
+            db.session.add(ProgrammeMusculation(**prog))
+
+        # --- Équipements de musculation
+        equipements = [
+            {"nom": "Banc de musculation", "description": "Idéal pour le développé couché", "disponible": True},
+            {"nom": "Haltères", "description": "Indispensables pour les exercices libres", "disponible": False},
+            {"nom": "Barre olympique", "description": "Utilisée pour le soulevé de terre et squat", "disponible": True},
+            {"nom": "Poulie vis-à-vis", "description": "Machine polyvalente pour les câbles", "disponible": True},
+        ]
+        for eq in equipements:
+            db.session.add(EquipementMusculation(**eq))
+
         # Commit the users to the database
         db.session.commit()
 
