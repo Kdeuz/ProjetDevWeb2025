@@ -60,11 +60,10 @@ function App() {
               </>
             )}
 
-            {userData && userData.is_admin && (
-              // Afficher "Admin" si l'utilisateur est un administrateur
+            {/* Afficher le lien Admin si l'utilisateur est un administrateur */}
+            {userData && userData.is_admin == 1 && (
               <li><Link to="/admin">Admin</Link></li>
             )}
-            
           </ul>
         </nav>
 

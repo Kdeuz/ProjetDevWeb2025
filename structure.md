@@ -28,3 +28,21 @@ ProjetDevWeb/
 ├── .gitignore             # Fichier .gitignore (à ignorer node_modules, fichiers secrets, etc.)
 ├── LICENSE                # Licence du projet (par exemple, MIT)
 └── config.py              # Configuration globale du projet (API keys, paths, etc.)
+
+Pour tester admin : 
+
+admin@exemple.com
+admin12345
+
+
+Pour tester un user: 
+
+user@exemple.com
+user12345
+
+
+INSERT INTO users VALUES
+(1, 'admin@exemple.com', 'admin-1', '$2b$12$gO4/Gk0UmksGAp3z0zukZuCMNb68CKVe1RR5yridTQaPaEH8hK8IS', 1, 'AdminFirst', 'AdminLast', 35, '9876543210'),
+(2, 'user@exemple.com', 'user-1', '$2b$12$1m52Gg3WCfhkhPOJDmMZpeeUGekMwEyYrAUdfWgFbx3JfgLhlAqKq', 0, 'user', '1', 20, '123456789'),
+(3, 'user2@exemple.com', 'user2', '$2b$12$joeqFiPeAWiomzelPK.6De5t6qPXC8DJykIeIA3jX2zOkN/O9eRP6', 0, 'user2', 'user2', 22, '222222222'),
+(4, 'user3@exemple.com', 'user3', '$2b$12$ni9IUlzwlsbuB.l.0Xppx.tKT5WPNan5LD1BrnAJ2LluR1csu0Li6', 0, 'user3', 'user3', 33, '123456');

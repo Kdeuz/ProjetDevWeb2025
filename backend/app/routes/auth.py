@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .. import db
 from ..models import User
-from ..models import CodeInscription
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -14,21 +14,17 @@ def index():
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
-    required_fields = ['email', 'username', 'password', 'prenom', 'nom', 'age', 'telephone', 'code']
+    required_fields = ['email', 'username', 'password', 'prenom', 'nom', 'age', 'telephone']
 
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Champs manquants'}), 400
 
-    code_obj = CodeInscription.query.filter_by(code=data.get('code'), utilisé=False).first()
-
-    if not code_obj or code_obj.is_expired():
-        return jsonify({"error": "Code d'inscription invalide, expire ou déjà utilise"}), 400
-
-    # Marque le code comme utilisé
-    code_obj.utilisé = True
-
+    # Check if email already exists
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'error': 'Email déjà utilise'}), 409
+
+    # Check if the user is registering as an admin (you can pass a flag in the request body)
+    is_admin = data.get('is_admin', False)
 
     new_user = User(
         email=data['email'],
@@ -36,14 +32,19 @@ def register():
         prenom=data['prenom'],
         nom=data['nom'],
         age=int(data['age']),
-        telephone=data['telephone']
+        telephone=data['telephone'],
+        is_admin=is_admin  # You would need to add `is_admin` field in the User model
     )
+    
+    # Hash the password
     new_user.set_password(data['password'])
 
+    # Add new user to the database
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'Inscription reussie'}), 201
+    return jsonify({'message': 'Inscription réussie', 'is_admin': is_admin}), 201
+
 
 # --- Route : Connexion ---
 @auth_bp.route('/login', methods=['POST'])

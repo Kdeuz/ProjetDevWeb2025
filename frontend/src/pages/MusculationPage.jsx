@@ -1,28 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import { Link } from "react-router-dom";
 
 const MusculationPage = () => {
-    const [equipmentAvailable, setEquipmentAvailable] = useState({
-        benchPress: true,
-        squatRack: false,
-        treadmill: true,
-    });
+    const [programs, setPrograms] = useState([]);
+    const [equipmentList, setEquipmentList] = useState([]);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
 
+    useEffect(() => {
+        fetch('http://localhost:5000/api/programmes')
+            .then(res => res.json())
+            .then(data => setPrograms(data))
+            .catch(err => console.error(err));
+
+        fetch('http://localhost:5000/api/equipements')
+            .then(res => res.json())
+            .then(data => setEquipmentList(data))
+            .catch(err => console.error(err));
+    }, []);
+
     const handleNewsletterSubmit = (e) => {
         e.preventDefault();
-        if (newsletterEmail) {
-            setIsSubscribed(true);
-        }
+        if (newsletterEmail) setIsSubscribed(true);
     };
 
-    const toggleEquipment = (equipment) => {
-        setEquipmentAvailable((prev) => ({
-            ...prev,
-            [equipment]: !prev[equipment],
-        }));
+    const toggleEquipment = (id) => {
+        setEquipmentList(prev =>
+            prev.map(eq =>
+                eq.id === id ? { ...eq, disponible: !eq.disponible } : eq
+            )
+        );
+        // Optionnel : envoyer le changement au backend ici
     };
 
     return (
@@ -35,37 +44,22 @@ const MusculationPage = () => {
 
             {/* Program Section */}
             <section className="about">
-    <h2>Nos Programmes de Musculation</h2>
-    <p>
-        Que vous soyez un débutant ou un expert, nos programmes de musculation sont adaptés à tous les niveaux. Nos coachs
-        vous guideront tout au long de votre parcours pour que vous atteigniez vos objectifs.
-    </p>
+                <h2>Nos Programmes de Musculation</h2>
+                <p>
+                    Que vous soyez un débutant ou un expert, nos programmes de musculation sont adaptés à tous les niveaux. Nos coachs
+                    vous guideront tout au long de votre parcours pour que vous atteigniez vos objectifs.
+                </p>
 
-    {/* Program Cards with Buttons */}
-    <div className="program-cards">
-        <div className="program-card">
-            <h3>Programme Débutant</h3>
-            <p>Un programme pour ceux qui commencent leur parcours de musculation. Idéal pour développer la force de base.</p>
-            <button className="program-btn">En savoir plus</button>
-        </div>
-        <div className="program-card">
-            <h3>Programme Avancé</h3>
-            <p>Pour les athlètes expérimentés cherchant à pousser leurs limites et à développer une force maximale.</p>
-            <button className="program-btn">En savoir plus</button>
-        </div>
-        <div className="program-card">
-            <h3>Programme Force & Endurance</h3>
-            <p>Un programme équilibré entre force et endurance pour améliorer votre résistance physique globale.</p>
-            <button className="program-btn">En savoir plus</button>
-        </div>
-        <div className="program-card">
-            <h3>Programme Hyper Trophy</h3>
-            <p>Un programme intensif pour développer la masse musculaire avec des séances dédiées à la prise de volume.</p>
-            <button className="program-btn">En savoir plus</button>
-        </div>
-    </div>
-</section>
-
+                <div className="program-cards">
+                    {programs.map(program => (
+                        <div key={program.id} className="program-card">
+                            <h3>{program.titre}</h3>
+                            <p>{program.description}</p>
+                            <button className="program-btn">En savoir plus</button>
+                        </div>
+                    ))}
+                </div>
+            </section>
 
             {/* Coaching Section */}
             <section className="coaching">
@@ -77,7 +71,7 @@ const MusculationPage = () => {
                 <button className="coaching-btn">Réservez votre session</button>
             </section>
 
-            {/* Equipment Section with Table */}
+            {/* Equipment Section */}
             <section className="equipment">
                 <h2>Nos Équipements</h2>
                 <table className="equipment-table">
@@ -90,29 +84,14 @@ const MusculationPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {['benchPress', 'squatRack', 'treadmill'].map((equipment) => (
-                            <tr key={equipment}>
+                        {equipmentList.map(equipment => (
+                            <tr key={equipment.id}>
+                                <td>{equipment.label}</td>
+                                <td>{equipment.description}</td>
+                                <td>{equipment.disponible ? 'Disponible' : 'Indisponible'}</td>
                                 <td>
-                                    <span role="img" aria-label="equipment-icon">
-                                        {equipment === 'benchPress'
-                                            ? '🏋️‍♂️ Banc de Musculation'
-                                            : equipment === 'squatRack'
-                                            ? '🏋️‍♀️ Rack à Squats'
-                                            : '🏃‍♂️ Tapis de Course'}
-                                    </span>
-                                </td>
-                                <td>
-                                    {equipment === 'benchPress'
-                                        ? 'Un banc pour la musculation du haut du corps.'
-                                        : equipment === 'squatRack'
-                                        ? 'Rack pour les squats et autres exercices.'
-                                        : 'Tapis pour l’entraînement cardio.'
-                                    }
-                                </td>
-                                <td>{equipmentAvailable[equipment] ? 'Disponible' : 'Indisponible'}</td>
-                                <td>
-                                    <button onClick={() => toggleEquipment(equipment)}>
-                                        {equipmentAvailable[equipment] ? 'Rendre Indisponible' : 'Rendre Disponible'}
+                                    <button onClick={() => toggleEquipment(equipment.id)}>
+                                        {equipment.disponible ? 'Rendre Indisponible' : 'Rendre Disponible'}
                                     </button>
                                 </td>
                             </tr>
@@ -121,7 +100,7 @@ const MusculationPage = () => {
                 </table>
             </section>
 
-            {/* Testimonials Section */}
+            {/* Testimonials Section (statique) */}
             <section className="feedback">
                 <h2>Ce Que Disent Nos Membres</h2>
                 <div className="testimonial">

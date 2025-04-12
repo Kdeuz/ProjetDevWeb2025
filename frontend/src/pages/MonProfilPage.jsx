@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUserData } from '../api'; // import the function to fetch user data
 import './style.css';
 
 const MonProfilPage = () => {
+  const [userData, setUserData] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
-  const [courses, setCourses] = useState([
-    { name: 'Natation Avancée', completed: false },
-    { name: 'Aquagym', completed: true },
-    { name: 'Plongée Sous-Marine', completed: false },
-  ]);
+  const [courses, setCourses] = useState([]);
   const [performance, setPerformance] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData();
+        setUserData(data);
+        setProfileImage(data?.profileImage || null);
+        setCourses(data?.courses || []);
+        setPerformance(data?.performance || null);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -17,35 +31,22 @@ const MonProfilPage = () => {
     }
   };
 
+  if (!userData) {
+    return <div>Loading...</div>; // Show loading message while data is being fetched
+  }
+
   return (
     <div className="page monprofil-page">
       <header className="profile-header">
-        <p>Bienvenue sur votre page personnelle ! Mettez à jour vos informations et suivez vos progrès.</p>
+        <p>Bienvenue sur votre page personnelle ! </p>
       </header>
 
       <section className="profile-info">
         <h3>Mes Informations</h3>
         <div className="profile-details">
-          <p><strong>Nom:</strong> John Doe</p>
-          <p><strong>Email:</strong> john@example.com</p>
-          <p><strong>Abonnement:</strong> 6 mois</p>
-          <p><strong>QR Code pour entrée:</strong></p>
-          <img src="/path-to-qrcode.png" alt="QR Code" />
-        </div>
-
-        <div className="profile-photo">
-          <h4>Photo de Profil</h4>
-          {profileImage ? (
-            <img src={profileImage} alt="Profile" className="profile-img" />
-          ) : (
-            <p>Pas de photo de profil sélectionnée.</p>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="upload-btn"
-          />
+          <p><strong>Nom:</strong> {userData?.nom || 'Nom utilisateur'}</p>
+          <p><strong>Email:</strong> {userData?.prenom || 'Email non renseigné'}</p>
+          <p><strong>Abonnement:</strong> {userData?.subscription || 'Non spécifié'}</p>
         </div>
       </section>
 
@@ -73,13 +74,6 @@ const MonProfilPage = () => {
           <p>Aucun cours suivi pour le moment.</p>
         )}
         <button className="add-course-btn">Ajouter un Cours</button>
-      </section>
-
-      <section className="cool-options">
-        <h3>Options Cool</h3>
-        <p>Faites partie d'une communauté active et bénéficiez de fonctionnalités personnalisées pour suivre vos progrès.</p>
-        <button className="option-btn">Rejoindre la communauté</button>
-        <button className="option-btn">Consulter l'historique</button>
       </section>
     </div>
   );

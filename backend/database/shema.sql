@@ -2,22 +2,18 @@ CREATE TABLE Coach(
    idCoachM INT,
    nom VARCHAR(50),
    prenom VARCHAR(50),
+   description TEXT,
    PRIMARY KEY(idCoachM)
-);
-
-CREATE TABLE MNS(
-   idMNS INT,
-   nom VARCHAR(50),
-   prenom VARCHAR(50),
-   PRIMARY KEY(idMNS)
 );
 
 CREATE TABLE Cours(
    idCours INT,
-   debut DATETIME,
-   fin DATETIME,
-   type VARCHAR(50),
-   PRIMARY KEY(idCours)
+   nom VARCHAR(50),
+   description TEXT,
+   duree INT,
+   idCoachM INT NOT NULL,
+   PRIMARY KEY(idCours),
+   FOREIGN KEY(idCoachM) REFERENCES Coach(idCoachM)
 );
 
 CREATE TABLE SalleFitness(
@@ -112,3 +108,4 @@ CREATE TABLE Surveiller(
    FOREIGN KEY(idMNS) REFERENCES MNS(idMNS),
    FOREIGN KEY(idBassin) REFERENCES Bassin(idBassin)
 );
+

@@ -87,23 +87,11 @@ export default function LoginPage({ userData, setUserData }) { // Recevoir userD
         ) : (
           <div aria-live="polite">
             <h4>Bienvenue {userData.prenom} 👋</h4>
+            <h4>Statut administrateur : {userData.is_admin == 1 ? "Oui" : "Non"}</h4>
             <p>Vous êtes maintenant connecté à votre espace personnel.</p>
           </div>
         )}
       </section>
-
-        
-      {/* Section des liens conditionnels */}
-      {!userData && ( // Afficher les liens uniquement si l'utilisateur n'est pas connecté
-        <section className="login-links">
-          <div>
-            <Link to="/register" className="login-link">Pas de compte? Inscrivez-vous</Link>
-          </div>
-          <div>
-            <Link to="/admin" className="login-link">Connexion en tant qu'admin</Link>
-          </div>
-        </section>
-      )}
     </div>
   );
 }

@@ -1,0 +1,22 @@
+# TODO List
+
+1. Ajouter dans la base de données le contenu de chaque page :
+    - **FitnessPage** : Ajouter les données initiales pour les coachs, les cours, les personnes actuelles dans les espaces fitness, et les témoignages.
+    - **MusculationPage** : Ajouter les programmes, les équipements (avec leur disponibilité), et les témoignages.
+    - **PiscinePage** : Ajouter les informations sur les bassins, les cours disponibles, les personnes par bassin, et les témoignages.
+
+2. Rendre les trois pages dynamiques :
+    - Récupérer les données depuis la base de données.
+    - Conserver la même mise en page que les pages statiques.
+
+3. Vérifier les fonctions backend :
+    - Identifier les fonctions backend qui effectuent les tâches nécessaires.
+    - Ajouter les fonctions manquantes si nécessaire.
+
+4. Mettre à jour la page AdminPage :
+    - Ajouter la possibilité pour l'administrateur de modifier tout le contenu mentionné plus haut pour chaque page.
+
+
+6. Ajouter les pages JSX nécessaires pour rendre les trois pages dynamiques.
+
+7. Supprimer ou annuler tout ce qui va nous tarder et qui n'est pas necessaire

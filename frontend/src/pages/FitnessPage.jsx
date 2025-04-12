@@ -1,18 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import { Link } from "react-router-dom";
+import { getFitnessData } from '../api';
+
 
 const FitnessPage = () => {
-    const [peopleCount, setPeopleCount] = useState(20);
+    const [peopleCount, setPeopleCount] = useState(0);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
+    const [coachs, setCoachs] = useState([]);
+    const [cours, setCours] = useState([]);
 
+/*   useEffect(() => {
+
+// Simule des données de coachs (à remplacer par appel backend)
+        const mockCoachs = [
+            {
+                id: 1,
+                nom: "Silvester Stallone",
+                description: "Expert en musculation et nutrition. Jean vous aidera à construire votre force et à optimiser votre alimentation."
+            },
+            {
+                id: 2,
+                nom: "Marie Curie",
+                description: "Spécialiste en yoga et bien-être. Marie vous guidera vers un équilibre parfait entre corps et esprit."
+            },
+            {
+                id: 3,
+                nom: "Paul Martin",
+                description: "Coach cardio et endurance. Avec Paul, améliorez votre condition physique et repoussez vos limites."
+            },
+            {
+                id: 4,
+                nom: "Emma Bernard",
+                description: "Instructrice de Pilates et stretching. Emma vous aidera à renforcer votre corps tout en améliorant votre souplesse."
+            }
+        ];
+        setCoachs(mockCoachs);
+    }, []);
+
+    // Simule des données de planning de cours
+    useEffect(() => {
+        const mockCours = [
+            { id: 1, jour: "Lundi", heure: "18:00", activite: "Yoga" },
+            { id: 2, jour: "Mardi", heure: "19:00", activite: "Cardio" },
+            { id: 3, jour: "Mercredi", heure: "20:00", activite: "Musculation" },
+            { id: 4, jour: "Jeudi", heure: "18:30", activite: "HIIT" },
+            { id: 5, jour: "Vendredi", heure: "19:00", activite: "Pilates" },
+            { id: 6, jour: "Samedi", heure: "10:00", activite: "Bootcamp" },
+            { id: 7, jour: "Dimanche", heure: "11:00", activite: "Méditation" }
+        ];
+        setCours(mockCours);
+    }, []);
+    // Simule une fluctuation du nombre de personnes en salle
     useEffect(() => {
         const interval = setInterval(() => {
             setPeopleCount((prevCount) => Math.max(10, prevCount + Math.floor(Math.random() * 5 - 2)));
         }, 3000);
+
+        // TODO: Remplacer ce comportement par une valeur récupérée via une API réelle si besoin
         return () => clearInterval(interval);
     }, []);
+*/
+
+//On commence par récupérer les données de l'API
+// On utilise useEffect pour charger les données au démarrage du composant
+
+useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const data = await getFitnessData();
+            setCoachs(data.coachs || []);
+            setCours(data.cours || []);
+            setPeopleCount(data.stats?.total_participants || 0);
+        } catch (error) {
+            console.error("Erreur de chargement des données fitness :", error);
+        }
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 3000); // Mise à jour toutes les 3s
+
+    return () => clearInterval(interval);
+}, []);
 
     const handleNewsletterSubmit = (e) => {
         e.preventDefault();
@@ -20,6 +90,14 @@ const FitnessPage = () => {
             setIsSubscribed(true);
         }
     };
+
+    
+
+
+
+
+
+
 
     return (
         <div className="page fitness-page">
@@ -43,26 +121,13 @@ const FitnessPage = () => {
                 <h2>Nos Coachs</h2>
                 <p>Rencontrez notre équipe de coachs passionnés et expérimentés, prêts à vous guider à chaque étape de votre parcours.</p>
                 <div className="coach-list">
-                    <div className="coach">
-                        <span className="coach-icon">👤</span>
-                        <h3>Jean Dupont</h3>
-                        <p>Expert en musculation et nutrition. Jean vous aidera à construire votre force et à optimiser votre alimentation.</p>
-                    </div>
-                    <div className="coach">
-                        <span className="coach-icon">👤</span>
-                        <h3>Marie Curie</h3>
-                        <p>Spécialiste en yoga et bien-être. Marie vous guidera vers un équilibre parfait entre corps et esprit.</p>
-                    </div>
-                    <div className="coach">
-                        <span className="coach-icon">👤</span>
-                        <h3>Paul Martin</h3>
-                        <p>Coach cardio et endurance. Avec Paul, améliorez votre condition physique et repoussez vos limites.</p>
-                    </div>
-                    <div className="coach">
-                        <span className="coach-icon">👤</span>
-                        <h3>Emma Bernard</h3>
-                        <p>Instructrice de Pilates et stretching. Emma vous aidera à renforcer votre corps tout en améliorant votre souplesse.</p>
-                    </div>
+                    {coachs.map((coach) => (
+                        <div className="coach" key={coach.id}>
+                            <span className="coach-icon">👤</span>
+                            <h3>{coach.nom_complet}</h3>
+                            <p>{coach.description}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 
@@ -78,41 +143,13 @@ const FitnessPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Lundi</td>
-                            <td>18:00</td>
-                            <td>Yoga</td>
-                        </tr>
-                        <tr>
-                            <td>Mardi</td>
-                            <td>19:00</td>
-                            <td>Cardio</td>
-                        </tr>
-                        <tr>
-                            <td>Mercredi</td>
-                            <td>20:00</td>
-                            <td>Musculation</td>
-                        </tr>
-                        <tr>
-                            <td>Jeudi</td>
-                            <td>18:30</td>
-                            <td>HIIT</td>
-                        </tr>
-                        <tr>
-                            <td>Vendredi</td>
-                            <td>19:00</td>
-                            <td>Pilates</td>
-                        </tr>
-                        <tr>
-                            <td>Samedi</td>
-                            <td>10:00</td>
-                            <td>Bootcamp</td>
-                        </tr>
-                        <tr>
-                            <td>Dimanche</td>
-                            <td>11:00</td>
-                            <td>Méditation</td>
-                        </tr>
+                        {cours.map((cours) => (
+                            <tr key={cours.id}>
+                                <td>{cours.jour}</td>
+                                <td>{cours.heure}</td>
+                                <td>{cours.activite}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </section>

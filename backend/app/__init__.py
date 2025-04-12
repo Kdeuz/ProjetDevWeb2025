@@ -4,6 +4,12 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_login import LoginManager
 from .config import Config
+from dotenv import load_dotenv  
+import os
+
+load_dotenv()
+
+print("SECRET_KEY:", os.getenv('SECRET_KEY'))  # Print the loaded SECRET_KEY
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -13,26 +19,22 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    CORS(app)
+    CORS(app, supports_credentials=True)
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
 
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
-    from app.routes.performances import performance_bp
-    from app.routes.validation import validation_bp
-    from app.routes.cours import cours_bp
-    from app.routes.coach import coach_bp
-    from app.routes.bassin import bassin_bp
+    from app.routes.pageFitness import pageFitness_bp
+    
+
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
-    app.register_blueprint(performance_bp)
-    app.register_blueprint(validation_bp)
-    app.register_blueprint(cours_bp)
-    app.register_blueprint(coach_bp)
-    app.register_blueprint(bassin_bp)
+    app.register_blueprint(pageFitness_bp)
+    
+
 
     @login_manager.user_loader
     def load_user(user_id):

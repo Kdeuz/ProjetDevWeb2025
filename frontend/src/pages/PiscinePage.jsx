@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import { Link } from "react-router-dom";
+import { getPiscineData } from '../api'; // adapte le chemin selon ton projet
 
 const PiscinePage = () => {
+  const [nombreBassins, setNombreBassins] = useState(0);
+  const [cours, setCours] = useState([]);
+  const [nombreParBassin, setNombreParBassin] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getPiscineData(); // cette fonction doit retourner un objet { nombreBassins, cours, nombreParBassin }
+        setNombreBassins(data.nombreBassins);
+        setCours(data.cours);
+        setNombreParBassin(data.nombreParBassin);
+      } catch (error) {
+        console.error('Erreur lors du chargement des données piscine :', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="page piscine-page">
       <header className="header">
@@ -13,8 +33,8 @@ const PiscinePage = () => {
       <section className="about">
         <h2>Nos Bassins</h2>
         <div className="basins">
-          <p>Nous proposons trois bassins adaptés à tous les niveaux, pour nager, se détendre ou participer à des activités aquatiques.</p>
-          <p>Nombre de bassins: <strong>3</strong></p>
+          <p>Nous proposons {nombreBassins} bassin{nombreBassins > 1 ? 's' : ''} adapté{nombreBassins > 1 ? 's' : ''} à tous les niveaux, pour nager, se détendre ou participer à des activités aquatiques.</p>
+          <p>Nombre de bassins: <strong>{nombreBassins}</strong></p>
           <p>Consignes de sécurité et détails des bassins :</p>
           <ul>
             <li><strong>Bassin de natation :</strong> Idéal pour les longueurs et les entraînements intenses.</li>
@@ -29,32 +49,19 @@ const PiscinePage = () => {
         <h2>Cours Disponibles</h2>
         <p>Rejoignez nos cours aquatiques variés pour un entraînement complet et amusant :</p>
         <div className="class-list">
-          <div className="class-card">
-            <h3>Aquagym</h3>
-            <p>Un cours dynamique pour tonifier tout le corps tout en étant dans l'eau. Idéal pour tous les niveaux.</p>
-            <button className="class-btn">Rejoindre le cours</button>
-          </div>
-          <div className="class-card">
-            <h3>Compétitions</h3>
-            <p>Participez à nos compétitions de natation pour tester vos compétences et gagner des prix !</p>
-            <button className="class-btn">Inscrivez-vous</button>
-          </div>
-          <div className="class-card">
-            <h3>Plongée Sous-Marine</h3>
-            <p>Explorez les profondeurs de l'eau avec nos cours de plongée, adaptés à tous les niveaux.</p>
-            <button className="class-btn">Découvrir la plongée</button>
-          </div>
-          <div className="class-card">
-            <h3>Natation pour Enfants</h3>
-            <p>Des cours ludiques et éducatifs pour initier les plus jeunes à la natation.</p>
-            <button className="class-btn">Inscrire mon enfant</button>
-          </div>
+          {cours.map((coursItem, index) => (
+            <div className="class-card" key={index}>
+              <h3>{coursItem.nom}</h3>
+              <p>{coursItem.description}</p>
+              <button className="class-btn">En savoir plus</button>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="real-time">
         <h2>Personnes par Bassin</h2>
-        <p>Actuellement : <span className="people-count">10</span> personnes par bassin. Venez profiter de nos bassins spacieux !</p>
+        <p>Actuellement : <span className="people-count">{nombreParBassin}</span> personne{nombreParBassin > 1 ? 's' : ''} par bassin. Venez profiter de nos bassins spacieux !</p>
       </section>
 
       <section className="benefits">

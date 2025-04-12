@@ -2,11 +2,16 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+    
+    # Construction du chemin absolu pour la base de données
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    DATABASE_PATH = os.path.join(BASE_DIR, '../database/database.db')
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{DATABASE_PATH}'  # Utilisation du format sqlite:///chemin/absolu/vers/db
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SESSION_TYPE = 'filesystem'  # tu peux aussi mettre redis, sql, etc.
+    SESSION_TYPE = 'filesystem'  # On peut aussi utiliser redis, sql, etc.
     SESSION_PERMANENT = True
-    PERMANENT_SESSION_LIFETIME = 3600  # en secondes (1h ici)
-    SESSION_COOKIE_SECURE = True        # en HTTPS uniquement
-    SESSION_COOKIE_HTTPONLY = True      # inaccessible au JS
-    SESSION_COOKIE_SAMESITE = 'Lax'     # empêche certains cross-site attacks
+    PERMANENT_SESSION_LIFETIME = 3600  # Durée de la session en secondes (1h ici)
+    SESSION_COOKIE_SECURE = True        # Session uniquement en HTTPS
+    SESSION_COOKIE_HTTPONLY = True      # Inaccessible au JavaScript
+    SESSION_COOKIE_SAMESITE = 'Lax'     # Empêche certains attaques cross-site

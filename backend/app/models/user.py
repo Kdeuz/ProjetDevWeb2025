@@ -9,7 +9,6 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-
     # Infos supplémentaires à l'inscription
     prenom = db.Column(db.String(80))
     nom = db.Column(db.String(80))

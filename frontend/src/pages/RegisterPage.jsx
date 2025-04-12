@@ -11,7 +11,6 @@ export default function RegisterPage() {
     nom: "",
     age: "",
     telephone: "",
-    code: "",
   });
 
   const [message, setMessage] = useState("");
