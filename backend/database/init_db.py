@@ -1,20 +1,28 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from app import db
 from datetime import time
 from app.models.PageFitness import Coach, CoursFitness, FitnessStatus
 from app.models.user import User
+from app.models.musculation import ProgrammeMusculation, EquipementMusculation
+
 def init_database():
     """Initialize the database with sample data"""
     db.drop_all()  # Drop all tables
     db.create_all()  # Recreate the tables
 
     try:
-        # Clear existing data (optional - be careful in production)
+        # Clear existing data
         db.session.query(Coach).delete()
         db.session.query(CoursFitness).delete()
         db.session.query(FitnessStatus).delete()
-        db.session.query(User).delete()  # Clear existing users
+        db.session.query(User).delete()
+        db.session.query(ProgrammeMusculation).delete()
+        db.session.query(EquipementMusculation).delete()
 
-        # Define and add coaches
+        # --- Coaches
         coaches = [
             {
                 "nom": "Dupont",
@@ -37,14 +45,12 @@ def init_database():
                 "description": "Instructrice de Pilates et stretching. Emma vous aidera à renforcer votre corps tout en améliorant votre souplesse."
             },
         ]
-
         for coach in coaches:
             db.session.add(Coach(**coach))
 
-        # Commit coaches to ensure they are assigned IDs before using them
-        db.session.commit()
+        db.session.commit()  # Commit to assign coach IDs
 
-        # Define and add fitness courses with correct coach_id references
+        # --- Fitness courses
         fitness_courses = [
             {"jour": "Lundi", "heure": time(18, 0), "activite": "Yoga", "coach_id": 1},
             {"jour": "Mardi", "heure": time(19, 0), "activite": "Cardio", "coach_id": 2},
@@ -54,22 +60,19 @@ def init_database():
             {"jour": "Samedi", "heure": time(10, 0), "activite": "Bootcamp", "coach_id": 1},
             {"jour": "Dimanche", "heure": time(11, 0), "activite": "Méditation", "coach_id": 2},
         ]
-
         for course in fitness_courses:
             db.session.add(CoursFitness(**course))
 
-        # Initialize fitness status
+        # --- Fitness status
         db.session.add(FitnessStatus(personnes=20))
 
-        # Define users (without 'password' in constructor)
+        # --- Utilisateurs
         users = [
             {"email": "admin@exemple.com", "username": "admin-1", "is_admin": True, "prenom": "AdminFirst", "nom": "AdminLast", "age": 35, "telephone": "9876543210", "password": "adminpassword"},
             {"email": "user@exemple.com", "username": "user-1", "is_admin": False, "prenom": "user", "nom": "1", "age": 20, "telephone": "123456789", "password": "userpassword"},
             {"email": "user2@exemple.com", "username": "user2", "is_admin": False, "prenom": "user2", "nom": "user2", "age": 22, "telephone": "222222222", "password": "user2password"},
             {"email": "user3@exemple.com", "username": "user3", "is_admin": False, "prenom": "user3", "nom": "user3", "age": 33, "telephone": "123456", "password": "user3password"}
         ]
-
-        # Add users to the database and hash their passwords
         for user_data in users:
             user = User(
                 email=user_data["email"],
@@ -80,9 +83,9 @@ def init_database():
                 age=user_data["age"],
                 telephone=user_data["telephone"]
             )
-            user.set_password(user_data["password"])  # Hash the password using set_password
+            user.set_password(user_data["password"])  # Hash the password
             db.session.add(user)
-
+            
         bassins = [
             {"nom" : "Fosse", "description" : "Un bassin de plongé de 25 mètres de profondeur sublimé par un décor magnifique", "longueur" : 20.0, "profondeur" : 25.0},
             {"nom" : "Normal", "description" : "Un bassin de 25 mètres et 4 lignes", "longueur" : 25.0, "profondeur" : 2.0},
@@ -133,8 +136,8 @@ def init_database():
         db.session.commit()
 
         print("Database initialized successfully!")
+
     except Exception as e:
         db.session.rollback()
         print(f"Error initializing database: {str(e)}")
         raise
-

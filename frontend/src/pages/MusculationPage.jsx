@@ -25,15 +25,6 @@ const MusculationPage = () => {
         if (newsletterEmail) setIsSubscribed(true);
     };
 
-    const toggleEquipment = (id) => {
-        setEquipmentList(prev =>
-            prev.map(eq =>
-                eq.id === id ? { ...eq, disponible: !eq.disponible } : eq
-            )
-        );
-        // Optionnel : envoyer le changement au backend ici
-    };
-
     return (
         <div className="page musculation-page">
             {/* Header Section */}
@@ -80,27 +71,27 @@ const MusculationPage = () => {
                             <th>Équipement</th>
                             <th>Description</th>
                             <th>Disponibilité</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {equipmentList.map(equipment => (
-                            <tr key={equipment.id}>
-                                <td>{equipment.label}</td>
-                                <td>{equipment.description}</td>
-                                <td>{equipment.disponible ? 'Disponible' : 'Indisponible'}</td>
-                                <td>
-                                    <button onClick={() => toggleEquipment(equipment.id)}>
-                                        {equipment.disponible ? 'Rendre Indisponible' : 'Rendre Disponible'}
-                                    </button>
-                                </td>
+                        {equipmentList.length > 0 ? (
+                            equipmentList.map(equipment => (
+                                <tr key={equipment.id}>
+                                    <td>{equipment.nom}</td>
+                                    <td>{equipment.description || '—'}</td>
+                                    <td>{equipment.disponible ? 'Disponible' : 'Indisponible'}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3">Aucun équipement à afficher</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </section>
 
-            {/* Testimonials Section (statique) */}
+            {/* Testimonials Section */}
             <section className="feedback">
                 <h2>Ce Que Disent Nos Membres</h2>
                 <div className="testimonial">
