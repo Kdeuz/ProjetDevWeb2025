@@ -1,26 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import { Link } from "react-router-dom";
-import { getPiscineData } from '../api'; // adapte le chemin selon ton projet
+import { getPiscineData } from '../api';
 
 const PiscinePage = () => {
-  const [nombreBassins, setNombreBassins] = useState(0);
-  const [cours, setCours] = useState([]);
-  const [nombreParBassin, setNombreParBassin] = useState(0);
+  const [piscineData, setPiscineData] = useState({
+    nombreBassins: 3,
+    cours: [],
+    nombreParBassin: 0,
+    stats: { total_cours: 0 }
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getPiscineData(); // cette fonction doit retourner un objet { nombreBassins, cours, nombreParBassin }
-        setNombreBassins(data.nombreBassins);
-        setCours(data.cours);
-        setNombreParBassin(data.nombreParBassin);
-      } catch (error) {
-        console.error('Erreur lors du chargement des données piscine :', error);
+        const data = await getPiscineData();
+        setPiscineData(data.data || {
+          nombreBassins: 3,
+          cours: [],
+          nombreParBassin: 0,
+          stats: { total_cours: 0 }
+        });
+        setLoading(false);
+      } catch (err) {
+        console.error("Erreur de chargement des données:", err);
+        setError("Erreur de chargement des données");
+        setLoading(false);
       }
     };
 
     fetchData();
+    const interval = setInterval(fetchData, 3000); // Actualisation toutes les 3 secondes
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -33,8 +47,8 @@ const PiscinePage = () => {
       <section className="about">
         <h2>Nos Bassins</h2>
         <div className="basins">
-          <p>Nous proposons {nombreBassins} bassin{nombreBassins > 1 ? 's' : ''} adapté{nombreBassins > 1 ? 's' : ''} à tous les niveaux, pour nager, se détendre ou participer à des activités aquatiques.</p>
-          <p>Nombre de bassins: <strong>{nombreBassins}</strong></p>
+          <p>Nous proposons {piscineData.nombreBassins} bassins adaptés à tous les niveaux, pour nager, se détendre ou participer à des activités aquatiques.</p>
+          <p>Nombre de bassins: <strong>{piscineData.nombreBassins}</strong></p>
           <p>Consignes de sécurité et détails des bassins :</p>
           <ul>
             <li><strong>Bassin de natation :</strong> Idéal pour les longueurs et les entraînements intenses.</li>
@@ -48,20 +62,27 @@ const PiscinePage = () => {
       <section className="classes">
         <h2>Cours Disponibles</h2>
         <p>Rejoignez nos cours aquatiques variés pour un entraînement complet et amusant :</p>
-        <div className="class-list">
-          {cours.map((coursItem, index) => (
-            <div className="class-card" key={index}>
-              <h3>{coursItem.nom}</h3>
-              <p>{coursItem.description}</p>
-              <button className="class-btn">En savoir plus</button>
-            </div>
-          ))}
-        </div>
+        {loading ? (
+          <p>Chargement des cours...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <div className="class-list">
+            {piscineData.cours.map((cours) => (
+              <div className="class-card" key={cours.nom}>
+                <h3>{cours.nom}</h3>
+                <p>{cours.description}</p>
+                <p>Bassin: {cours.bassin}</p>
+                <button className="class-btn">Voir les horaires</button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="real-time">
         <h2>Personnes par Bassin</h2>
-        <p>Actuellement : <span className="people-count">{nombreParBassin}</span> personne{nombreParBassin > 1 ? 's' : ''} par bassin. Venez profiter de nos bassins spacieux !</p>
+        <p>Actuellement : <span className="people-count">{piscineData.nombreParBassin}</span> personnes par bassin. Venez profiter de nos bassins spacieux !</p>
       </section>
 
       <section className="benefits">

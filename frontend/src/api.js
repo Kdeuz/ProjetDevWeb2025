@@ -36,11 +36,26 @@ export async function getUserData() {
 
 // api.js
 export const getPiscineData = async () => {
-  const response = await fetch('/api/piscine'); // adapte l'URL à ton backend
-  if (!response.ok) {
-    throw new Error('Erreur de récupération des données piscine');
+  try {
+    // Utilisez l'URL absolue avec le port 5000
+    const response = await fetch('http://localhost:5000/api/piscine-data', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Debug crucial
+    console.log('Status:', response.status);
+    const text = await response.text();
+    console.log('Response text:', text.substring(0, 100));
+    
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
   }
-  return await response.json(); // doit contenir { nombreBassins, cours: [], nombreParBassin }
 };
 
 export const getProgrammes = async () => {

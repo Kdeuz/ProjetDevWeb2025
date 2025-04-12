@@ -7,6 +7,7 @@ from datetime import time
 from app.models.PageFitness import Coach, CoursFitness, FitnessStatus
 from app.models.user import User
 from app.models.musculation import ProgrammeMusculation, EquipementMusculation
+from app.models.PagePiscine import Bassin, CoursPiscine, PiscineStatus
 
 def init_database():
     """Initialize the database with sample data"""
