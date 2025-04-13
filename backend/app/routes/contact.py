@@ -1,4 +1,3 @@
-# routes/contact.py
 from flask import Blueprint, request, jsonify
 from ..models.Contact import ContactMessage
 from .. import db
