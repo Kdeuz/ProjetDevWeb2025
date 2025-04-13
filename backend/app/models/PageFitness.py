@@ -12,8 +12,6 @@ class Coach(db.Model):
     prenom = db.Column(db.String(80))
     description = db.Column(db.String(100))
 
-    # Relationship with CoursFitness (one-to-many)
-    courses = db.relationship('CoursFitness', backref='coach', lazy=True)
 
 class CoursFitness(db.Model):
     __tablename__ = 'cours_fitness'
@@ -22,15 +20,13 @@ class CoursFitness(db.Model):
     heure = db.Column(db.Time)       # Ex: '18:00:00'
     activite = db.Column(db.String(50))  # Ex: 'Yoga', 'Boxe'
     
-    # Foreign key to link with Coach
-    coach_id = db.Column(db.Integer, db.ForeignKey('coachs.id'), nullable=False)
+    
 
 class FitnessStatus(db.Model):
     __tablename__ = 'fitness_status'
     personnes = db.Column(db.Integer, default=0)
     id = db.Column(db.Integer, primary_key=True)
 
-# In the PageFitness class, modify _get_cours method:
 class PageFitness:
     """Agrège les données pour la page web"""
     
@@ -48,17 +44,13 @@ class PageFitness:
         return Coach.query.all()  # Retourne la liste des coachs
     
     def _get_cours(self):
-        # Charge en une seule requête les cours + coach
-        cours = CoursFitness.query.options(
-            db.joinedload(CoursFitness.coach),  # Join with coach table
-        ).all()
-        
+        # Simply fetch courses without loading coach info
+        cours = CoursFitness.query.all()  # No joinedload here, courses don't have a coach relationship
         return [{
             'id': c.id,
             'jour': c.jour,
             'heure': c.heure.strftime("%H:%M"),
             'activite': c.activite,
-            'coach': f"{c.coach.prenom} {c.coach.nom}",  # Use the coach relationship
         } for c in cours]
     
     def _get_stats(self):

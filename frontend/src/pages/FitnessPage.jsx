@@ -75,7 +75,7 @@ const FitnessPage = () => {
                         coachs.map((coach) => (
                             <div className="coach" key={coach.id}>
                                 <span className="coach-icon">👤</span>
-                                <h3>{coach.nom_complet}</h3>
+                                <h3>{coach.nom} {coach.prenom}</h3>
                                 <p>{coach.description}</p>
                             </div>
                         ))

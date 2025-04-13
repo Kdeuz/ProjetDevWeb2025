@@ -27,12 +27,14 @@ def create_app():
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
     from app.routes.pageFitness import pageFitness_bp
-    
-
+    from app.routes.pagePiscine import pagePiscine_bp
+    from app.routes.pageMusculation import pageMusculation_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(pageFitness_bp)
+    app.register_blueprint(pagePiscine_bp)
+    app.register_blueprint(pageMusculation_bp)
     
 
 

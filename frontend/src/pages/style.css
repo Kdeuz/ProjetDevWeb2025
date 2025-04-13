@@ -834,6 +834,63 @@ p {
     margin-top: 20px;
   }
 
+  /* General page styling */
+.piscine-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f7fa;
+}
+
+/* Table styling */
+.basins-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.basins-table th, .basins-table td {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.basins-table th {
+  background-color: #0077b6;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.basins-table td {
+  background-color: #ffffff;
+  font-size: 1rem;
+}
+
+.basins-table tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+/* Styling for pool feature */
+.pool-feature {
+  margin-top: 20px;
+  font-style: italic;
+  font-size: 1rem;
+  color: #0077b6;
+  text-align: center;
+}
+
+/* Section Styling */
+.about {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.about h2 {
+  font-size: 2rem;
+  color: #0077b6;
+  margin-bottom: 20px;
+}
+
+
   /* Responsive Adjustments */
   @media (max-width: 768px) {
     .admin-header h1 {
@@ -896,4 +953,154 @@ p {
     h2 {
         font-size: 1.5rem;
     }
+}
+
+/* AdminPiscinePage specific styles */
+.admin-piscine-page {
+  padding: 20px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.admin-piscine-page h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.edit-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.edit-button, .save-button, .cancel-button, .add-button, .remove-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.edit-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.save-button {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.add-button {
+  background-color: #27ae60;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.remove-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 25px 0 15px 0;
+}
+
+.section-header h3 {
+  color: #34495e;
+  margin: 0;
+}
+
+/* Table styling with horizontal scroll */
+.schedule {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+  background: white;
+  min-width: 800px; /* Ensures tables don't collapse too much */
+}
+
+.schedule-container {
+  overflow-x: auto;
+  width: 100%;
+  border: 1px solid #ecf0f1;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.schedule th {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+}
+
+.schedule td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ecf0f1;
+  vertical-align: top;
+}
+
+.schedule tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.schedule tr:hover {
+  background-color: #f1f8fe;
+}
+
+/* Input fields in edit mode */
+.schedule input[type="text"],
+.schedule input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.schedule textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 60px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* Status section specific styles */
+.status-section {
+  margin-top: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .edit-controls {
+    flex-wrap: wrap;
+  }
+  
+  .schedule th, 
+  .schedule td {
+    padding: 8px 10px;
+    font-size: 0.9em;
+  }
 }

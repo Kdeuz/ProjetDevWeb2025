@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { getPiscineData } from '../api';
 import './style.css';
 import { Link } from "react-router-dom";
-import { getPiscineData } from '../api'; // adapte le chemin selon ton projet
 
-const PiscinePage = () => {
-  const [nombreBassins, setNombreBassins] = useState(0);
-  const [cours, setCours] = useState([]);
-  const [nombreParBassin, setNombreParBassin] = useState(0);
+export default function PiscinePage() {
+  const [loading, setLoading] = useState(true);
+  const [piscineData, setPiscineData] = useState(null);
+  const [error, setError] = useState(null);
+
+  const fetchData = () => {
+    getPiscineData()
+      .then(data => {
+        setPiscineData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Erreur lors du chargement :", err);
+        setError("Erreur lors du chargement des données.");
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getPiscineData(); // cette fonction doit retourner un objet { nombreBassins, cours, nombreParBassin }
-        setNombreBassins(data.nombreBassins);
-        setCours(data.cours);
-        setNombreParBassin(data.nombreParBassin);
-      } catch (error) {
-        console.error('Erreur lors du chargement des données piscine :', error);
-      }
-    };
-
     fetchData();
+    const interval = setInterval(fetchData, 3000);
+    return () => clearInterval(interval);
   }, []);
+
+  if (loading) return <p>Chargement des données piscine...</p>;
+  if (error) return <p>{error}</p>;
+  if (!piscineData) return <p>Aucune donnée disponible</p>;
+
+  // Helper function to format pool status
+  const formatPoolStatus = (status) => {
+    return status === 0 ? "Fermé" : `${status} personnes`;
+  };
 
   return (
     <div className="page piscine-page">
@@ -32,66 +45,86 @@ const PiscinePage = () => {
 
       <section className="about">
         <h2>Nos Bassins</h2>
-        <div className="basins">
-          <p>Nous proposons {nombreBassins} bassin{nombreBassins > 1 ? 's' : ''} adapté{nombreBassins > 1 ? 's' : ''} à tous les niveaux, pour nager, se détendre ou participer à des activités aquatiques.</p>
-          <p>Nombre de bassins: <strong>{nombreBassins}</strong></p>
-          <p>Consignes de sécurité et détails des bassins :</p>
-          <ul>
-            <li><strong>Bassin de natation :</strong> Idéal pour les longueurs et les entraînements intenses.</li>
-            <li><strong>Bassin ludique :</strong> Pour les enfants et la détente, avec des jeux aquatiques et des zones de relaxation.</li>
-            <li><strong>Bassin de plongée :</strong> Profitez de la profondeur et de la tranquillité pour pratiquer la plongée sous-marine ou les activités aquatiques avancées.</li>
-          </ul>
-          <p className="pool-feature">Chaque bassin est équipé de systèmes de filtration modernes pour garantir une eau propre et claire en tout temps.</p>
-        </div>
+        <p>Nous proposons {piscineData.nombreBassins} bassins adaptés à tous les niveaux.</p>
+        <table className="basins-table">
+          <thead>
+            <tr>
+              <th>Nom du Bassin</th>
+              <th>Description</th>
+              <th>Longueur (m)</th>
+              <th>Profondeur (m)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {piscineData.bassins && piscineData.bassins.map(bassin => (
+              <tr key={bassin.id}>
+                <td><strong>{bassin.nom}</strong></td>
+                <td>{bassin.description}</td>
+                <td>{bassin.longueur}</td>
+                <td>{bassin.profondeur}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="pool-feature">Eau propre et claire grâce à notre filtration moderne.</p>
       </section>
 
       <section className="classes">
-        <h2>Cours Disponibles</h2>
-        <p>Rejoignez nos cours aquatiques variés pour un entraînement complet et amusant :</p>
+        <h2>Cours Disponibles ({piscineData.totalCours})</h2>
+        <p>Rejoignez nos cours aquatiques variés :</p>
         <div className="class-list">
-          {cours.map((coursItem, index) => (
-            <div className="class-card" key={index}>
-              <h3>{coursItem.nom}</h3>
-              <p>{coursItem.description}</p>
-              <button className="class-btn">En savoir plus</button>
+          {piscineData.cours.map((cours) => (
+            <div className="class-card" key={cours.id || cours.nom}>
+              <h3>{cours.nom}</h3>
+              <p>{cours.description}</p>
+              <p><strong>Jour :</strong> {cours.jour || "Non spécifié"}</p>
+              <p><strong>Heure :</strong> {cours.heure || "Non spécifié"}</p>
+              <p><strong>ID :</strong> {cours.id || "Non spécifié"}</p>
+              <button className="class-btn">S'inscrire </button>
             </div>
           ))}
         </div>
       </section>
 
       <section className="real-time">
-        <h2>Personnes par Bassin</h2>
-        <p>Actuellement : <span className="people-count">{nombreParBassin}</span> personne{nombreParBassin > 1 ? 's' : ''} par bassin. Venez profiter de nos bassins spacieux !</p>
+        <h2>Statut des Bassins</h2>
+        <div className="pool-status">
+          {piscineData.nombreParBassin && Object.entries(piscineData.nombreParBassin).map(([bassinName, status]) => (
+            <div key={bassinName} className="status-item">
+              <span className="pool-name">{bassinName}:</span>
+              <span className={`status ${status === 0 ? 'closed' : 'open'}`}>
+                {formatPoolStatus(status)}
+              </span>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="benefits">
         <h2>Les Bienfaits de la Natation</h2>
-        <p>La natation est un excellent exercice pour le corps et l'esprit. Voici quelques-uns des nombreux avantages :</p>
         <ul>
-          <li><strong>Améliore la santé cardiovasculaire :</strong> La natation augmente l'endurance et améliore la circulation sanguine.</li>
-          <li><strong>Renforce la musculature :</strong> Tous les groupes musculaires sont sollicités pendant la natation, ce qui renforce le corps.</li>
-          <li><strong>Réduit le stress :</strong> L'eau a un effet relaxant et permet de diminuer l'anxiété et la tension.</li>
-          <li><strong>Accessibilité :</strong> La natation est accessible à tous, quel que soit l'âge ou le niveau de forme physique.</li>
+          <li><strong>Cardio :</strong> Endurance & circulation améliorée.</li>
+          <li><strong>Muscles :</strong> Travail complet du corps.</li>
+          <li><strong>Relaxation :</strong> Diminution du stress.</li>
+          <li><strong>Accessibilité :</strong> Pour tous les âges.</li>
         </ul>
       </section>
 
       <section className="testimonials">
         <h2>Témoignages</h2>
         <div className="testimonial">
-          <p>"J'ai amélioré ma forme physique en un temps record grâce à l'aquagym ! Les cours sont adaptés à tous les niveaux." - <strong>Julie M.</strong></p>
+          <p>"Aquagym super efficace ! Cours accessibles à tous." - <strong>Julie M.</strong></p>
         </div>
         <div className="testimonial">
-          <p>"La piscine est super propre et les installations sont modernes. J'adore venir ici pour mes entraînements quotidiens." - <strong>Lucas B.</strong></p>
+          <p>"Piscine propre et moderne. Idéal pour mes entraînements." - <strong>Lucas B.</strong></p>
         </div>
       </section>
 
       <section className="contact">
         <h2>Contactez-Nous</h2>
-        <p>Vous avez des questions sur nos services aquatiques ? Contactez notre équipe pour plus d'informations !</p>
+        <p>Des questions ? Contactez notre équipe !</p>
         <Link to="/contact" className="join-button">Nous contacter</Link>
       </section>
     </div>
   );
-};
-
-export default PiscinePage;
+}

@@ -34,15 +34,6 @@ export async function getUserData() {
   return res.json();
 }
 
-// api.js
-export const getPiscineData = async () => {
-  const response = await fetch('/api/piscine'); // adapte l'URL à ton backend
-  if (!response.ok) {
-    throw new Error('Erreur de récupération des données piscine');
-  }
-  return await response.json(); // doit contenir { nombreBassins, cours: [], nombreParBassin }
-};
-
 export const getProgrammes = async () => {
   const res = await fetch("http://localhost:5000/api/programmes");
   return res.json();
@@ -77,4 +68,27 @@ export const getFitnessData = async () => {
     metadata: metadata // Contains last_updated and version
   };
 };
+
+export const getPiscineData = async () => {
+  const response = await fetch('http://localhost:5000/api/piscine-data');
+  
+  if (!response.ok) {
+    throw new Error('Erreur de récupération des données piscine');
+  }
+
+  const data = await response.json();
+  
+  if (!data.success) {
+    throw new Error(data.error || 'Erreur inconnue');
+  }
+
+  return {
+    cours: data.data.cours,
+    bassins: data.data.bassins,  // Added bassins data
+    nombreBassins: data.data.nombreBassins,
+    nombreParBassin: data.data.nombreParBassin,
+    totalCours: data.data.stats.total_cours
+  };
+};
+
 

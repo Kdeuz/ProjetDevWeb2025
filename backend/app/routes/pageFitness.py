@@ -1,11 +1,8 @@
 from flask import jsonify, Blueprint
-from datetime import time
-from sqlalchemy.orm import joinedload
 from datetime import datetime
-from ..models import Coach, CoursFitness, User, FitnessStatus
+from ..models import Coach, CoursFitness, FitnessStatus
 
 pageFitness_bp = Blueprint('pageFitness', __name__)
-
 
 @pageFitness_bp.route('/api/fitness-data')
 def get_all_fitness_data():
@@ -15,23 +12,19 @@ def get_all_fitness_data():
     coachs = Coach.query.all()
     coachs_data = [{
         'id': coach.id,
-        'nom_complet': f"{coach.prenom} {coach.nom}",
+        'nom': coach.nom,
+        'prenom': coach.prenom,
         'description': coach.description,
     } for coach in coachs]
 
-    # 2. Récupération des cours avec coach et participants
-    cours = CoursFitness.query.options(
-        joinedload(CoursFitness.coach),
-    ).order_by(CoursFitness.jour, CoursFitness.heure).all()
-
-    cours_data = []
-    for cours in cours:
-        cours_data.append({
-            'id': cours.id,
-            'jour': cours.jour,
-            'heure': cours.heure.strftime("%H:%M"),  # Formatage de l'heure
-            'activite': cours.activite,
-        })
+    # 2. Récupération des cours
+    cours = CoursFitness.query.all()  # Fetch all courses
+    cours_data = [{
+        'id': cours.id,
+        'jour': cours.jour,
+        'heure': cours.heure.strftime("%H:%M"),  # Formatage de l'heure
+        'activite': cours.activite,
+    } for cours in cours]
 
     # 3. Récupération du nombre de personnes
     fitness_status = FitnessStatus.query.first()
