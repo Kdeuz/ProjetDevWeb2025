@@ -131,7 +131,7 @@ def me():
         'age': user.age,
         'telephone': user.telephone,
         'avatar_id': user.avatar_id,
-        'records': user.mes_records,  # renamed for frontend clarity
+        'mes_records': user.mes_records,  # renamed for frontend clarity
         'courses': courses,
         'abonnement': abonnement_type  # Now returns an object like to_dict()
 

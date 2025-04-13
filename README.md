@@ -55,7 +55,7 @@ This is a web development project that uses **React** for the frontend and **Fla
     cd ../backend
     python3 run.py
     ```
-    Démarrez le frontend React :  
+    Oubrez un nouveau terminal et Démarrez le frontend React :  
     ```bash
     cd ../frontend
     ```
