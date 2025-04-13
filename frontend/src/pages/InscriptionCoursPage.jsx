@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
 
-//menu déroulant affichant la liste de tous les cours disponibles 
-
-
-
-
-
-
-
-
-// Fonction pour appeler l'API et envoyer les données du formulaire de contact
 async function sendContactForm(data) {
   // Envoie les données du formulaire à l'API backend
   const res = await fetch('http://localhost:5000/contact', {
