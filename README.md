@@ -12,50 +12,50 @@ This is a web development project that uses **React** for the frontend and **Fla
 ### Étapes en français :
 
 1. **Cloner le dépôt**  
-    Clonez ce dépôt sur votre machine locale :  
+    Cloner ce dépôt sur votre machine locale :  
     ```bash
     git clone <URL_DU_DEPOT>
     cd ProjetDevWeb
     ```
-    Créez un environnement virtuel Python :  
+    Créer un environnement virtuel Python :  
     ```bash
     python3 -m venv virtualenv
     source venv/bin/activate # Sur Windows : venv\Scripts\activate
     ```
 
 2. **Configurer l'environnement backend (Flask)**  
-    Accédez au dossier backend :  
+    Accéder au dossier backend :  
     ```bash
     cd backend
     ```
-    Installez les dépendances :  
+    Installer les dépendances :  
     ```bash
     pip install -r requirements.txt
     ```
 
-    Revenez au dossier racine :  
+    Revener au dossier racine :  
     ```bash
     cd ..
     ```
 
 3. **Configurer le frontend (React)**  
-    Accédez au dossier frontend :  
+    Accéder au dossier frontend :  
     ```bash
     cd frontend
     ```
 
-    Installez les dépendances Node.js en exécutan :  
+    Installer les dépendances Node.js en exécutant :  
     ```bash
     npm install
     ```
 
 4. **Lancer le projet**  
-    Démarrez le backend Flask :  
+    Démarrer le backend Flask :  
     ```bash
     cd ../backend
     python3 run.py
     ```
-    Oubrez un nouveau terminal et Démarrez le frontend React :  
+    Ouvrer un nouveau terminal et démarrer le frontend React :  
     ```bash
     cd ../frontend
     ```
@@ -71,65 +71,6 @@ This is a web development project that uses **React** for the frontend and **Fla
 
 5. **Accéder à l'application**  
     Ouvrez votre navigateur et accédez à [http://localhost:3000](http://localhost:3000).
-
----
-
-
-### Steps in English:
-
-1. **Clone the repository**  
-    Clone this repository to your local machine:  
-    ```bash
-    git clone <REPOSITORY_URL>
-    cd ProjetDevWeb
-    ```
-    Create a Python virtual environment:  
-    ```bash
-    python3 -m venv virtualenv
-    source venv/bin/activate # On Windows: venv\Scripts\activate
-    ```
-
-2. **Set up the backend environment (Flask)**  
-    Navigate to the backend folder:  
-    ```bash
-    cd backend
-    ```
-    Install the dependencies:  
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-    Return to the root folder:  
-    ```bash
-    cd ..
-    ```
-
-3. **Set up the frontend (React)**  
-    Navigate to the frontend folder:  
-    ```bash
-    cd frontend
-    ```
-
-    Install the Node.js dependencies by running:  
-    ```bash
-    npm install
-    ```
-
-4. **Run the project**  
-    Start the Flask backend:  
-    ```bash
-    cd ../backend
-    flask run
-    ```
-
-    Start the React frontend:  
-    ```bash
-    cd ../frontend
-    npm start
-    ```
-
-5. **Access the application**  
-    Open your browser and go to [http://localhost:3000](http://localhost:3000).
 
 ---
 
