@@ -174,6 +174,23 @@ ProjetDevWeb/
 
 ---
 
+## Utilisateurs de test / Test Users
+
+Voici trois utilisateurs de test pour l'application :
+
+1. **Administrateur**  
+    - **Email**: `admin@exemple.com`  
+    - **Mot de passe / Password**: `adminpassword`  
+
+2. **Utilisateur VIP**  
+    - **Email**: `user@exemple.com`  
+    - **Mot de passe / Password**: `userpassword`  
+
+3. **Utilisateur normal**  
+    - **Email**: `user2@exemple.com`  
+    - **Mot de passe / Password**: `user2password`  
+
+
 ## License / Licence
 
 This project is licensed under the MIT License. See the LICENSE file for more details.  

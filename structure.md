@@ -1,48 +1,163 @@
 ProjetDevWeb/
-├── backend/               # Fichiers backend Flask (API, gestion de base de données, etc.)
-│   ├── app.py             # Fichier principal Flask (application backend)
-│   ├── routes/            # Routes de l'API Flask
-│   ├── models/            # Modèles de base de données (SQLAlchemy ou autre ORM)
-│   ├── database/          # Gestion des connexions à la base de données
-│   ├── config.py          # Fichier de configuration pour le backend (clé API, config DB)
-│   └── requirements.txt   # Dépendances Python pour le backend
-│
-├── frontend/              # Fichiers frontend React
-│   ├── src/               # Code source du frontend (React)
-│   │   ├── components/    # Composants React
-│   │   ├── pages/         # Pages React (Accueil, Dashboard, etc.)
-│   │   └── App.js         # Point d’entrée React
-│   ├── public/            # Fichiers publics (index.html, etc.)
-│   ├── package.json       # Dépendances frontend (React, etc.)
-│   ├── package-lock.json  # Assure une installation cohérente des dépendances
-│   ├── styles/            # Fichiers CSS personnalisés
-│   └── node_modules/      # Modules Node.js (générés automatiquement, à ignorer dans Git)
-│
-├── database/              # Fichiers de gestion de base de données (SQL, migrations, etc.)
-│   ├── schema.sql         # Schéma de la base de données (tables, relations, etc.)
-│   ├── migrations/        # Dossier pour les migrations de base de données
-│   └── init_db.py         # Script d'initialisation de la base de données
-│
-├── virtualenv/            # Environnement virtuel Python
-├── README.md              # Documentation du projet
-├── .gitignore             # Fichier .gitignore (à ignorer node_modules, fichiers secrets, etc.)
-├── LICENSE                # Licence du projet (par exemple, MIT)
-└── config.py              # Configuration globale du projet (API keys, paths, etc.)
+# Documentation du projet
 
-Pour tester admin : 
+## Structure du projet
 
-admin@exemple.com
-admin12345
+### Backend
+- **app/** : Contient la logique principale de l'application backend.
+    - **config.py** : Fichier de configuration pour l'application.
+    - **__init__.py** : Fichier d'initialisation pour le module `app`.
+    - **models/** : Contient les modèles de données utilisés par l'application.
+        - **Abonnement.py** : Modèle pour gérer les abonnements.
+        - **Contact.py** : Modèle pour gérer les informations de contact.
+        - **PageFitness.py** : Modèle pour la page dédiée au fitness.
+        - **PageMusculation.py** : Modèle pour la page dédiée à la musculation.
+        - **PagePiscine.py** : Modèle pour la page dédiée à la piscine.
+        - **Subscriptions.py** : Modèle pour gérer les souscriptions.
+        - **user.py** : Modèle pour gérer les utilisateurs.
+    - **routes/** : Contient les routes de l'application.
+        - **admin.py** : Routes pour les fonctionnalités administratives.
+        - **auth.py** : Routes pour l'authentification.
+        - **contact.py** : Routes pour la gestion des contacts.
+        - **pageFitness.py** : Routes pour la page fitness.
+        - **pageMusculation.py** : Routes pour la page musculation.
+        - **pagePiscine.py** : Routes pour la page piscine.
+        - **subscribe.py** : Routes pour la gestion des abonnements.
+    - **utils/** : Contient des utilitaires pour l'application.
+        - **plot_utils.py** : Utilitaires pour la génération de graphiques.
+- **database/** : Contient les fichiers liés à la base de données.
+    - **database.db** : Fichier de base de données SQLite.
+    - **init_db.py** : Script pour initialiser la base de données.
+    - **schema.sql** : Fichier SQL pour définir le schéma de la base de données.
+- **requirements.txt** : Liste des dépendances Python nécessaires.
+- **run.py** : Point d'entrée pour exécuter l'application backend.
 
+### Frontend
+- **package.json** : Fichier de configuration pour le gestionnaire de paquets npm.
+- **package-lock.json** : Fichier de verrouillage des dépendances npm.
+- **public/** : Contient les fichiers publics accessibles directement.
+    - **assets/images/** : Contient les images utilisées dans l'application.
+        - **acceuil.png** : Image pour la page d'accueil.
+        - **avatar1.png** à **avatar5.png** : Images d'avatars.
+        - **contact.png** : Image pour la page de contact.
+        - **fitness.png** : Image pour la page fitness.
+        - **logo.png** : Logo de l'application.
+        - **musculation.png** : Image pour la page musculation.
+        - **piscine.png** : Image pour la page piscine.
+    - **favicon.ico** : Icône de l'application.
+    - **index.html** : Fichier HTML principal.
+    - **manifest.json** : Fichier de configuration pour les Progressive Web Apps.
+    - **robots.txt** : Fichier pour les moteurs de recherche.
+- **src/** : Contient le code source de l'application frontend.
+    - **api.js** : Fichier pour gérer les appels API.
+    - **App.css** : Styles globaux pour l'application.
+    - **App.js** : Composant principal de l'application React.
+    - **index.css** : Fichier CSS pour les styles globaux.
+    - **index.js** : Point d'entrée pour l'application React.
+    - **logo.svg** : Logo au format SVG.
+    - **pages/** : Contient les pages de l'application.
+        - **AdminFitnessPage.jsx** : Page d'administration pour le fitness.
+        - **AdminMusculationPage.jsx** : Page d'administration pour la musculation.
+        - **AdminPage.jsx** : Page d'administration générale.
+        - **AdminPiscinePage.jsx** : Page d'administration pour la piscine.
+        - **AdminStatisticPage.jsx** : Page pour les statistiques administratives.
+        - **ContactPage.jsx** : Page de contact.
+        - **DeleteUserPage.jsx** : Page pour supprimer un utilisateur.
+        - **FitnessPage.jsx** : Page dédiée au fitness.
+        - **InscriptionCoursPage.jsx** : Page pour l'inscription aux cours.
+        - **LoginPage.jsx** : Page de connexion.
+        - **MonProfilPage.jsx** : Page pour afficher le profil de l'utilisateur.
+        - **MusculationPage.jsx** : Page dédiée à la musculation.
+        - **PiscinePage.jsx** : Page dédiée à la piscine.
+        - **RegisterPage.jsx** : Page d'inscription.
+        - **style.css** : Fichier CSS pour les styles des pages.
+        - **SubscribePage.jsx** : Page pour gérer les abonnements.
+    - **reportWebVitals.js** : Fichier pour mesurer les performances de l'application.
+    - **setupTests.js** : Fichier de configuration pour les tests.
 
-Pour tester un user: 
-
-user@exemple.com
-user12345
-
-
-INSERT INTO users VALUES
-(1, 'admin@exemple.com', 'admin-1', '$2b$12$gO4/Gk0UmksGAp3z0zukZuCMNb68CKVe1RR5yridTQaPaEH8hK8IS', 1, 'AdminFirst', 'AdminLast', 35, '9876543210'),
-(2, 'user@exemple.com', 'user-1', '$2b$12$1m52Gg3WCfhkhPOJDmMZpeeUGekMwEyYrAUdfWgFbx3JfgLhlAqKq', 0, 'user', '1', 20, '123456789'),
-(3, 'user2@exemple.com', 'user2', '$2b$12$joeqFiPeAWiomzelPK.6De5t6qPXC8DJykIeIA3jX2zOkN/O9eRP6', 0, 'user2', 'user2', 22, '222222222'),
-(4, 'user3@exemple.com', 'user3', '$2b$12$ni9IUlzwlsbuB.l.0Xppx.tKT5WPNan5LD1BrnAJ2LluR1csu0Li6', 0, 'user3', 'user3', 33, '123456');
+### Racine du projet
+- **LICENSE** : Fichier de licence du projet.
+- **README.md** : Documentation principale du projet.
+- **structure.md** : Fichier décrivant la structure du projet.
+- **TODO** : Liste des tâches à accomplir.
+├── backend/
+│   ├── app/
+│   │   ├── config.py
+│   │   ├── __init__.py
+│   │   ├── models/
+│   │   │   ├── Abonnement.py
+│   │   │   ├── Contact.py
+│   │   │   ├── __init__.py
+│   │   │   ├── PageFitness.py
+│   │   │   ├── PageMusculation.py
+│   │   │   ├── PagePiscine.py
+│   │   │   ├── Subscriptions.py
+│   │   │   └── user.py
+│   │   ├── routes/
+│   │   │   ├── admin.py
+│   │   │   ├── auth.py
+│   │   │   ├── contact.py
+│   │   │   ├── pageFitness.py
+│   │   │   ├── pageMusculation.py
+│   │   │   ├── pagePiscine.py
+│   │   │   └── subscribe.py
+│   │   └── utils/
+│   │       └── plot_utils.py
+│   ├── database/
+│   │   ├── database.db
+│   │   ├── init_db.py
+│   │   └── schema.sql
+│   ├── requirements.txt
+│   └── run.py
+├── frontend/
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public/
+│   │   ├── assets/
+│   │   │   └── images/
+│   │   │       ├── acceuil.png
+│   │   │       ├── avatar1.png
+│   │   │       ├── avatar2.png
+│   │   │       ├── avatar3.png
+│   │   │       ├── avatar4.png
+│   │   │       ├── avatar5.png
+│   │   │       ├── contact.png
+│   │   │       ├── fitness.png
+│   │   │       ├── logo.png
+│   │   │       ├── musculation.png
+│   │   │       └── piscine.png
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   ├── README.md
+│   └── src/
+│       ├── api.js
+│       ├── App.css
+│       ├── App.js
+│       ├── index.css
+│       ├── index.js
+│       ├── logo.svg
+│       ├── pages/
+│       │   ├── AdminFitnessPage.jsx
+│       │   ├── AdminMusculationPage.jsx
+│       │   ├── AdminPage.jsx
+│       │   ├── AdminPiscinePage.jsx
+│       │   ├── AdminStatisticPage.jsx
+│       │   ├── ContactPage.jsx
+│       │   ├── DeleteUserPage.jsx
+│       │   ├── FitnessPage.jsx
+│       │   ├── InscriptionCoursPage.jsx
+│       │   ├── LoginPage.jsx
+│       │   ├── MonProfilPage.jsx
+│       │   ├── MusculationPage.jsx
+│       │   ├── PiscinePage.jsx
+│       │   ├── RegisterPage.jsx
+│       │   ├── style.css
+│       │   └── SubscribePage.jsx
+│       ├── reportWebVitals.js
+│       └── setupTests.js
+├── LICENSE
+├── README.md
+├── structure.md
+└── TODO
