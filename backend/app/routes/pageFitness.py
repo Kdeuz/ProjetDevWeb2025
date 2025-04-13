@@ -2,7 +2,7 @@ from flask import jsonify, Blueprint
 import base64
 import io
 import matplotlib
-matplotlib.use('Agg')  # Set the backend to Agg before importing pyplot
+matplotlib.use('Agg') 
 from matplotlib import pyplot as plt
 from datetime import datetime
 from ..models import Coach, CoursFitness, FitnessStatus
