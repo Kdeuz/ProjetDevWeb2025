@@ -26,7 +26,6 @@ export default function AdminPiscinePage() {
           bassins: [...data.bassins],
           cours: [...data.cours].map(c => ({
             ...c,
-            // Ensure heure is in HH:MM format
             heure: c.heure ? c.heure.slice(0, 5) : '00:00'
           })),
           nombreParBassin: {...data.nombreParBassin}
