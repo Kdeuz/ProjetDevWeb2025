@@ -19,9 +19,9 @@ class User(db.Model, UserMixin):
 
     # Add avatar fields
     avatar_id = db.Column(db.Integer, default=1)  # Default to first avatar
-    avatar_url = db.Column(db.String(255))  # Optional: if you want to store full URL
+    avatar_url = db.Column(db.String(255))  
     # Add new field for user records (notes)
-    mes_records = db.Column(db.Text)  # This will store the user's notes or records
+    mes_records = db.Column(db.Text)  
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
