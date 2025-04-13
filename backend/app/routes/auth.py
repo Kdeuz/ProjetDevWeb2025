@@ -43,7 +43,7 @@ def register():
 
     return jsonify({
         'message': 'Inscription réussie',
-        'user': new_user.to_dict()  # Use the safe to_dict() method
+        'user': new_user.to_dict()
     }), 201
 
 # --- Route : Connexion ---
