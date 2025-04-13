@@ -13,7 +13,7 @@ export async function registerUser(userData) {
 export async function loginUser(credentials) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
-    credentials: "include", // ✅ add this!
+    credentials: "include", 
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
@@ -24,7 +24,7 @@ export async function loginUser(credentials) {
 export async function getUserData() {
   const res = await fetch(`${API_URL}/me`, {
     method: "GET",
-    credentials: "include", // to include authentication cookies
+    credentials: "include", 
   });
 
   if (!res.ok) {
