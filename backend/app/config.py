@@ -11,7 +11,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_TYPE = 'filesystem'  # On peut aussi utiliser redis, sql, etc.
     SESSION_PERMANENT = True
-    PERMANENT_SESSION_LIFETIME = 3600  # Durée de la session en secondes (1h ici)
+    PERMANENT_SESSION_LIFETIME = 3600  
     SESSION_COOKIE_SECURE = True        # Session uniquement en HTTPS
     SESSION_COOKIE_HTTPONLY = True      # Inaccessible au JavaScript
     SESSION_COOKIE_SAMESITE = 'Lax'     # Empêche certains attaques cross-site
