@@ -40,8 +40,8 @@ class User(db.Model, UserMixin):
             'telephone': self.telephone,
             'is_admin': self.is_admin,
             'avatar_id': self.avatar_id,
-            'avatar_url': self.avatar_url or self.get_avatar_url(),  # Use method if URL not stored
-            'mes_records': self.mes_records,  # Add the user's notes/records
+            'avatar_url': self.avatar_url or self.get_avatar_url(),  
+            'mes_records': self.mes_records, 
             'abonnement': {
                 'id': self.abonnement.id,
                 'type': self.abonnement.type  
@@ -50,5 +50,4 @@ class User(db.Model, UserMixin):
         
     
     def get_avatar_url(self):
-        # Example function to generate the avatar URL
         return f"/avatar{self.avatar_id}.png"
