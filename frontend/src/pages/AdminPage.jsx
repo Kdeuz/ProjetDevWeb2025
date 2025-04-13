@@ -5,7 +5,7 @@ import AdminFitnessPage from "./AdminFitnessPage";
 import AdminMusculationPage from "./AdminMusculationPage";
 import AdminPiscinePage from "./AdminPiscinePage";
 import AdminStatisticPage from "./AdminStatisticPage";
-import DeleteUserPage from "./DeleteUserPage"; // Import the DeleteUserPage
+import DeleteUserPage from "./DeleteUserPage"; 
 
 export default function AdminPage() {
   const [afficherSalles, setAfficherSalles] = useState(false);
