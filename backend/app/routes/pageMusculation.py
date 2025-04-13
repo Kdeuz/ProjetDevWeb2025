@@ -2,7 +2,7 @@ import base64
 import io
 from flask import Blueprint, jsonify
 import matplotlib
-matplotlib.use('Agg')  # Set the backend to Agg before importing pyplot
+matplotlib.use('Agg') 
 from matplotlib import pyplot as plt
 from ..models.PageMusculation import ProgrammeMusculation, EquipementMusculation
 
