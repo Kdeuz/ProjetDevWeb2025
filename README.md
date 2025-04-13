@@ -7,47 +7,6 @@ C'est un projet de développement web qui utilise **React** pour le frontend et 
 This is a web development project that uses **React** for the frontend and **Flask** for the backend. The goal of this project is to build a full-stack web application, where the frontend communicates with a backend API to manage and display data from a database.
 
 ---
-
-Admin : nouveau@mail.com  ----- supersecret
-
-
-## Structure du projet / Project Structure
-
-```
-ProjetDevWeb/
-├── backend/                # Fichiers backend Flask (API, gestion de base de données, etc.)
-│   ├── app.py              # Fichier principal Flask (application backend)
-│   ├── routes/             # Routes de l'API Flask
-│   ├── models/             # Modèles de base de données (SQLAlchemy ou autre ORM)
-│   ├── database/           # Gestion des connexions à la base de données
-│   ├── config.py           # Fichier de configuration pour le backend (clé API, config DB)
-│   └── requirements.txt    # Dépendances Python pour le backend
-│
-├── frontend/               # Fichiers frontend React
-│   ├── src/                # Code source du frontend (React)
-│   │   ├── components/     # Composants React
-│   │   ├── pages/          # Pages React (Accueil, Dashboard, etc.)
-│   │   └── App.js          # Point d’entrée React
-│   ├── public/             # Fichiers publics (index.html, etc.)
-│   ├── package.json        # Dépendances frontend (React, etc.)
-│   ├── package-lock.json   # Assure une installation cohérente des dépendances
-│   ├── styles/             # Fichiers CSS personnalisés
-│   └── node_modules/       # Modules Node.js (générés automatiquement, à ignorer dans Git)
-│
-├── database/               # Fichiers de gestion de base de données (SQL, migrations, etc.)
-│   ├── schema.sql          # Schéma de la base de données (tables, relations, etc.)
-│   ├── migrations/         # Dossier pour les migrations de base de données
-│   └── init_db.py          # Script d'initialisation de la base de données
-│
-├── virtualenv/             # Environnement virtuel Python
-├── README.md               # Documentation du projet
-├── .gitignore              # Fichier .gitignore (à ignorer node_modules, fichiers secrets, etc.)
-├── LICENSE                 # Licence du projet (par exemple, MIT)
-└── config.py               # Configuration globale du projet (API keys, paths, etc.)
-```
-
----
-
 ## Instructions pour exécuter le projet localement / Instructions to run the project locally
 
 ### Étapes en français :
