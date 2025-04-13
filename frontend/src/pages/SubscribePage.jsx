@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./style.css"; // We'll create this CSS file
+import "./style.css"; 
 
 const Subscribe = () => {
   const [course, setCourse] = useState(null);
