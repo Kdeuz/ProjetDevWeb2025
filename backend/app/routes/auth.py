@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .. import db
-from ..models import User
+from ..models import User, UserSubscription, CoursFitness, CoursPiscine, ProgrammeMusculation
 
 
 auth_bp = Blueprint('auth', __name__)
@@ -64,11 +64,100 @@ def login():
 def logout():
     logout_user()
     return jsonify({'message': 'Deconnexion reussie'}), 200
-
-# --- Route : Données utilisateur connecté ---
 @auth_bp.route('/me', methods=['GET'])
 @login_required
 def me():
-    return jsonify(current_user.to_dict())
+    user = current_user
+    
+    # Fetch the user's subscriptions
+    subscriptions = UserSubscription.query.filter_by(user_id=user.id).all()
 
+    courses = []
+    for subscription in subscriptions:
+        course_type = subscription.course_type
+        course_id = subscription.course_id
+        
+        # Get the course details based on type
+        if course_type == 'fitness':
+            course = CoursFitness.query.get(course_id)
+            if course:
+                courses.append({
+                    'type': 'fitness',
+                    'id': course.id,  # Include the course ID
+                    'course_id': course.id,  # Alternative ID field
+                    'details': {
+                        'activite': course.activite,
+                        'jour': course.jour,
+                        'heure': course.heure.strftime('%H:%M') if course.heure else None
+                    }
+                })
+        elif course_type == 'piscine':
+            course = CoursPiscine.query.get(course_id)
+            if course:
+                courses.append({
+                    'type': 'piscine',
+                    'id': course.id,  # Include the course ID
+                    'course_id': course.id,  # Alternative ID field
+                    'details': {
+                        'nom': course.nom,
+                        'description': course.description,
+                        'jour': course.jour,
+                        'heure': course.heure.strftime('%H:%M') if course.heure else None
+                    }
+                })
+        elif course_type == 'muscu':
+            course = ProgrammeMusculation.query.get(course_id)
+            if course:
+                courses.append({
+                    'type': 'muscu',
+                    'id': course.id,  # Include the course ID
+                    'course_id': course.id,  # Alternative ID field
+                    'details': {
+                        'titre': course.titre,
+                        'description': course.description
+                    }
+                })
 
+    # Get user data and include courses
+    user_data = user.to_dict()
+    user_data['courses'] = courses  # Add detailed courses to user data
+    user_data['avatar_id'] = user.avatar_id  # Add the avatar ID to the response
+    
+    return jsonify(user_data)
+
+@auth_bp.route('/check-auth')
+def check_auth():
+    if current_user.is_authenticated:
+        return jsonify({'authenticated': True}), 200
+    else:
+        return jsonify({'authenticated': False}), 401
+@auth_bp.route('/update-avatar', methods=['POST'])
+@login_required
+def update_avatar():
+    try:
+        data = request.get_json()
+        avatar_id = data.get('avatar_id')
+        
+        if not avatar_id:
+            return jsonify({'success': False, 'error': 'Missing avatarId'}), 400
+        
+        # Validate avatar_id is within allowed range
+        if avatar_id not in [1, 2, 3, 4, 5]:
+            return jsonify({'success': False, 'error': 'Invalid avatar ID'}), 400
+        
+        current_user.avatar_id = avatar_id
+        current_user.avatar_url = f"/assets/images/avatar{avatar_id}.png"
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Avatar updated successfully',
+            'avatar_id': current_user.avatar_id,
+            'avatar_url': current_user.avatar_url
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating avatar: {e}")
+        return jsonify({'success': False, 'error': 'Failed to update avatar'}), 500

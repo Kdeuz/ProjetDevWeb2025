@@ -57,11 +57,55 @@ def init_database():
 
         # --- Users (from the second code)
         users = [
-            {"email": "admin@exemple.com", "username": "admin-1", "is_admin": True, "prenom": "AdminFirst", "nom": "AdminLast", "age": 35, "telephone": "9876543210", "password": "adminpassword"},
-            {"email": "user@exemple.com", "username": "user-1", "is_admin": False, "prenom": "user", "nom": "1", "age": 20, "telephone": "123456789", "password": "userpassword"},
-            {"email": "user2@exemple.com", "username": "user2", "is_admin": False, "prenom": "user2", "nom": "user2", "age": 22, "telephone": "222222222", "password": "user2password"},
-            {"email": "user3@exemple.com", "username": "user3", "is_admin": False, "prenom": "user3", "nom": "user3", "age": 33, "telephone": "123456", "password": "user3password"}
-        ]
+    {
+        "email": "admin@exemple.com", 
+        "username": "admin-1", 
+        "is_admin": True, 
+        "prenom": "AdminFirst", 
+        "nom": "AdminLast", 
+        "age": 35, 
+        "telephone": "9876543210", 
+        "password": "adminpassword",
+        "avatar_id": 1,  # Admin gets avatar1 by default
+        "avatar_url": "/assets/images/avatar1.png"
+    },
+    {
+        "email": "user@exemple.com", 
+        "username": "user-1", 
+        "is_admin": False, 
+        "prenom": "user", 
+        "nom": "1", 
+        "age": 20, 
+        "telephone": "123456789", 
+        "password": "userpassword",
+        "avatar_id": 2,
+        "avatar_url": "/assets/images/avatar2.png"
+    },
+    {
+        "email": "user2@exemple.com", 
+        "username": "user2", 
+        "is_admin": False, 
+        "prenom": "user2", 
+        "nom": "user2", 
+        "age": 22, 
+        "telephone": "222222222", 
+        "password": "user2password",
+        "avatar_id": 3,
+        "avatar_url": "/assets/images/avatar3.png"
+    },
+    {
+        "email": "user3@exemple.com", 
+        "username": "user3", 
+        "is_admin": False, 
+        "prenom": "user3", 
+        "nom": "user3", 
+        "age": 33, 
+        "telephone": "123456", 
+        "password": "user3password",
+        "avatar_id": 4,
+        "avatar_url": "/assets/images/avatar4.png"
+    },
+]
         for user_data in users:
             user = User(
                 email=user_data["email"],
@@ -70,7 +114,9 @@ def init_database():
                 prenom=user_data["prenom"],
                 nom=user_data["nom"],
                 age=user_data["age"],
-                telephone=user_data["telephone"]
+                telephone=user_data["telephone"],
+                avatar_id=user_data["avatar_id"],
+                avatar_url=user_data["avatar_url"]
             )
             user.set_password(user_data["password"])  # Hash the password
             db.session.add(user)

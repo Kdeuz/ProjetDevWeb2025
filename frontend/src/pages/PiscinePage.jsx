@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getPiscineData } from '../api';
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+
+
 
 export default function PiscinePage() {
   const [loading, setLoading] = useState(true);
@@ -27,6 +30,14 @@ export default function PiscinePage() {
     return () => clearInterval(interval);
   }, []);
 
+  const navigate = useNavigate();
+      
+  const handleSubscribe = (courseId, courseType) => {
+              // Store course info in localStorage or navigate with state
+      localStorage.setItem("selectedCourse", JSON.stringify({ id: courseId, type: courseType }));
+      navigate("/subscribe");  // if using react-router
+  };
+
   if (loading) return <p>Chargement des données piscine...</p>;
   if (error) return <p>{error}</p>;
   if (!piscineData) return <p>Aucune donnée disponible</p>;
@@ -35,6 +46,9 @@ export default function PiscinePage() {
   const formatPoolStatus = (status) => {
     return status === 0 ? "Fermé" : `${status} personnes`;
   };
+  
+
+  
 
   return (
     <div className="page piscine-page">
@@ -80,7 +94,12 @@ export default function PiscinePage() {
               <p><strong>Jour :</strong> {cours.jour || "Non spécifié"}</p>
               <p><strong>Heure :</strong> {cours.heure || "Non spécifié"}</p>
               <p><strong>ID :</strong> {cours.id || "Non spécifié"}</p>
-              <button className="class-btn">S'inscrire </button>
+              <button
+                                className="subscribe-button"
+                                onClick={() => handleSubscribe(cours.id, 'piscine')}
+                            >
+                                S'inscrire
+                            </button>
             </div>
           ))}
         </div>

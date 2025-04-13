@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 
 const MusculationPage = () => {
@@ -49,6 +50,13 @@ const MusculationPage = () => {
             setIsSubscribed(true);
         }
     };
+    const navigate = useNavigate();
+    
+        const handleSubscribe = (courseId, courseType) => {
+            // Store course info in localStorage or navigate with state
+            localStorage.setItem("selectedCourse", JSON.stringify({ id: courseId, type: courseType }));
+            navigate("/subscribe");  // if using react-router
+          };
 
     return (
         <div className="page musculation-page">
@@ -57,35 +65,56 @@ const MusculationPage = () => {
                 <p>Transformez votre corps avec des séances intensives et un suivi personnalisé.</p>
             </header>
 
-            <section className="about">
-                <h2>Nos Programmes de Musculation</h2>
-                <p>
-                    Que vous soyez un débutant ou un expert, nos programmes sont adaptés à tous les niveaux.
-                </p>
+            <section className="calendar">
+    <h2>Nos Programmes de Musculation</h2>
+    <p>
+        Que vous soyez un débutant ou un expert, nos programmes sont adaptés à tous les niveaux.
+    </p>
+    <table className="schedule">
+        <thead>
+            <tr>
+                <th>Programme</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {loading ? (
+                <tr><td colSpan="3">Chargement des programmes...</td></tr>
+            ) : error ? (
+                <tr><td colSpan="3" className="error">{error}</td></tr>
+            ) : (
+                programs.map((program) => (
+                    <tr key={program.id}>
+                        <td>{program.titre}</td>
+                        <td>{program.description}</td>
+                        <td>
+                            <button
+                                className="subscribe-button"
+                                onClick={() => handleSubscribe(program.id, 'muscu')}
+                            >
+                                S'inscrire
+                            </button>
+                        </td>
+                    </tr>
+                ))
+            )}
+        </tbody>
+    </table>
+</section>
 
-                {loading ? (
-                    <p>Chargement des programmes...</p>
-                ) : error ? (
-                    <p className="error">{error}</p>
-                ) : (
-                    <div className="program-cards">
-                        {programs.map(program => (
-                            <div key={program.id} className="program-card">
-                                <h3>{program.titre}</h3>
-                                <p>{program.description}</p>
-                                <button className="program-btn">En savoir plus</button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </section>
 
             <section className="coaching">
                 <h2>Coaching Personnalisé</h2>
                 <p>
                     Nos coachs conçoivent des séances sur mesure selon vos objectifs.
                 </p>
-                <button className="coaching-btn">Réservez votre session</button>
+                <button
+                    className="coaching-btn"
+                    onClick={() => navigate('/contact')}
+                >
+                    Réservez votre session
+                </button>
             </section>
 
             <section className="equipment">

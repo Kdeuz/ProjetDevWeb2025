@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { getFitnessData } from '../api';
 
 const FitnessPage = () => {
@@ -44,6 +45,14 @@ const FitnessPage = () => {
             setIsSubscribed(true);
         }
     };
+    const navigate = useNavigate();
+
+    const handleSubscribe = (courseId, courseType) => {
+        // Store course info in localStorage or navigate with state
+        localStorage.setItem("selectedCourse", JSON.stringify({ id: courseId, type: courseType }));
+        navigate("/subscribe");  // if using react-router
+      };
+      
 
     return (
         <div className="page fitness-page">
@@ -92,6 +101,7 @@ const FitnessPage = () => {
                             <th>Jour</th>
                             <th>Heure</th>
                             <th>Activité</th>
+                            <th>Inscription</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,6 +115,14 @@ const FitnessPage = () => {
                                     <td>{coursItem.jour}</td>
                                     <td>{coursItem.heure}</td>
                                     <td>{coursItem.activite}</td>
+                                    <td>
+                            <button
+                                className="subscribe-button"
+                                onClick={() => handleSubscribe(coursItem.id, 'fitness')}
+                            >
+                                S'inscrire
+                            </button>
+                            </td>
                                 </tr>
                             ))
                         )}

@@ -11,7 +11,9 @@ import MonProfilPage from './pages/MonProfilPage';
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
-import InscriptionCoursPage from "./pages/InscriptionCoursPage";
+import SubscribePage from "./pages/SubscribePage";
+
+;
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -24,10 +26,17 @@ function App() {
     }
   }, []);
 
-  // Fonction pour gérer la déconnexion
   const handleLogout = () => {
     setUserData(null);
     localStorage.removeItem("userData");
+    
+    // Add this to clear the server-side session
+    fetch('http://localhost:5000/logout', {
+      method: 'POST',
+      credentials: 'include'  // Important for cookies/session
+    }).then(() => {
+      window.location.reload();  // Optional: refresh the page
+    });
   };
 
   return (
@@ -129,7 +138,7 @@ function App() {
             <Route path="/piscine" element={<PiscinePage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/monprofil" element={<MonProfilPage />} />
-            <Route path="/inscriptioncours" element={<InscriptionCoursPage />} />
+            <Route path="/Subscribe" element={<SubscribePage />} />
 
             {/* Pages Authentification */}
             <Route path="/register" element={<RegisterPage />} />

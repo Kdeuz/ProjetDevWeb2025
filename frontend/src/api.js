@@ -31,8 +31,20 @@ export async function getUserData() {
     throw new Error('Failed to fetch user data');
   }
 
-  return res.json();
+  const data = await res.json();
+
+  console.log('User Courses:', data.courses);  // This will log the courses with details
+  console.log('User Avatar ID:', data.avatar_id);  // Log the avatar ID
+  
+  // Assuming you have a state for the avatar URL
+  const avatarUrl = data.avatar_url;
+
+  return { ...data, avatarUrl };  // Return avatar URL along with other user data
 }
+
+
+
+
 
 export const getProgrammes = async () => {
   const res = await fetch("http://localhost:5000/api/programmes");
@@ -91,4 +103,45 @@ export const getPiscineData = async () => {
   };
 };
 
+export async function unsubscribeFromCourse(courseId, courseType) {
+  const res = await fetch(`${API_URL}/api/delete-subscription`, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      course_id: courseId,
+      course_type: courseType
+    })
+  });
 
+  if (!res.ok) {
+    throw new Error('Failed to unsubscribe from course');
+  }
+
+  return await res.json();
+}
+
+export async function updateUserAvatar(avatarId) {
+  try {
+    const res = await fetch(`${API_URL}/update-avatar`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ avatar_id: avatarId })
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to update avatar');
+    }
+
+    const data = await res.json();
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error updating avatar:', error);
+    return { success: false, error: error.message };
+  }
+}

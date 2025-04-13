@@ -1,100 +1,82 @@
 import React, { useState } from 'react';
 
-// Fonction pour appeler l'API et envoyer les données du formulaire de contact
-async function sendContactForm(data) {
-  // Envoie les données du formulaire à l'API backend
-  const res = await fetch('http://localhost:5000/contact', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data), // Convertir les données du formulaire en JSON
-  });
-  return res.json(); // Retourne la réponse de l'API
-}
-
 const ContactPage = () => {
-  // Utilisation de useState pour gérer les données du formulaire
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [feedback, setFeedback] = useState('');
 
-  const [feedbackMessage, setFeedbackMessage] = useState('');
-
-  // Fonction pour mettre à jour l'état du formulaire lorsqu'une valeur change
   const handleChange = (e) => {
-    setForm({
-      ...form, // Conserve les autres champs du formulaire
-      [e.target.name]: e.target.value, // Met à jour la valeur du champ modifié
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page lors de la soumission
+    e.preventDefault();
+    setFeedback("Envoi en cours...");
 
-    // Affiche un message de "chargement" pendant l'envoi
-    setFeedbackMessage('Envoi en cours...');
-
-    // Envoie les données du formulaire au backend
-    const result = await sendContactForm(form);
-
-    // Vérifie si l'envoi a réussi et met à jour le message en conséquence
-    if (result.success) {
-      setFeedbackMessage('✅ Message envoyé avec succès !');
-    } else {
-      setFeedbackMessage(`❌ Erreur : ${result.error}`);
-    }
-
-    // Réinitialise les champs du formulaire après l'envoi
-    setForm({
-      name: '',
-      email: '',
-      message: '',
+    const res = await fetch("http://localhost:5000/api/contact", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
     });
+
+    const data = await res.json();
+    if (data.success) {
+      setFeedback("✅ Message envoyé !");
+      setForm({ name: '', email: '', message: '' });
+    } else {
+      setFeedback(`❌ Erreur : ${data.error}`);
+    }
   };
 
   return (
     <div className="page contact-page">
-      <h2>Contact</h2>
-      <form onSubmit={handleSubmit}>
+      <h2>📬 Contactez-nous</h2>
+      <form onSubmit={handleSubmit} className="contact-form">
         <div className="form-group">
-          <label htmlFor="name">Nom: </label>
+          <label htmlFor="name">👤 Nom :</label>
           <input
-            type="text"
             id="name"
             name="name"
+            className="form-control"
+            placeholder="Entrez votre nom"
             value={form.name}
-            onChange={handleChange} // Gère le changement des champs
+            onChange={handleChange}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email: </label>
+          <label htmlFor="email">📧 Email :</label>
           <input
-            type="email"
             id="email"
             name="email"
+            type="email"
+            className="form-control"
+            placeholder="Entrez votre email"
             value={form.email}
             onChange={handleChange}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="message">Message: </label>
+          <label htmlFor="message">💬 Message :</label>
           <textarea
             id="message"
             name="message"
+            className="form-control"
+            placeholder="Écrivez votre message"
             value={form.message}
             onChange={handleChange}
             required
           />
         </div>
-        <button type="submit">Envoyer</button>
+        <button type="submit" className="btn btn-primary">
+          🚀 Envoyer
+        </button>
       </form>
-      {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
+      {feedback && (
+        <p className={`feedback ${feedback.startsWith('✅') ? 'success' : 'error'}`}>
+          {feedback}
+        </p>
+      )}
     </div>
   );
 };
