@@ -33,18 +33,15 @@ export async function getUserData() {
 
   const data = await res.json();
 
-  console.log('User Courses:', data.courses);  // This will log the courses with details
-  console.log('User Avatar ID:', data.avatar_id);  // Log the avatar ID
-  
-  // Assuming you have a state for the avatar URL
+  console.log('User Courses:', data.courses);      // Log user courses
+  console.log('User Avatar ID:', data.avatar_id);  // Log avatar ID
+  console.log('Mes Records:', data.mes_records);   // Log mes_records (the personal notes)
+
   const avatarUrl = data.avatar_url;
 
-  return { ...data, avatarUrl };  // Return avatar URL along with other user data
+  // Return everything including avatarUrl and mes_records
+  return { ...data, avatarUrl, mes_records: data.mes_records || '' };
 }
-
-
-
-
 
 export const getProgrammes = async () => {
   const res = await fetch("http://localhost:5000/api/programmes");
@@ -145,3 +142,46 @@ export async function updateUserAvatar(avatarId) {
     return { success: false, error: error.message };
   }
 }
+
+export async function updateUserRecords(mesRecords) {
+  try {
+    const res = await fetch(`${API_URL}/update-records`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ mes_records: mesRecords })
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to update records');
+    }
+
+    const data = await res.json();
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error updating records:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateUserProfile(updatedData) {
+  const response = await fetch(`${API_URL}/update-profile`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include', // <- THIS is important
+    body: JSON.stringify(updatedData),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Failed to update profile');
+  }
+
+  return data;
+}
+
+

@@ -86,10 +86,23 @@ export default function LoginPage({ userData, setUserData }) { // Recevoir userD
           </form>
         ) : (
           <div aria-live="polite">
-            <h4>Bienvenue {userData.prenom} 👋</h4>
-            <h4>Statut administrateur : {userData.is_admin == 1 ? "Oui" : "Non"}</h4>
-            <p>Vous êtes maintenant connecté à votre espace personnel.</p>
-          </div>
+          <h4>Bienvenue {userData.prenom} 👋</h4>
+          <h4>
+            Abonnement :{" "}
+            {userData.abonnement
+              ? userData.abonnement.id === 1
+                ? "VIP"
+                : userData.abonnement.id === 2
+                ? "Normal"
+                : "Inconnu"
+              : "Inconnu"}
+          </h4>
+          {userData.is_admin === 1 && (
+            <h4>Statut administrateur 👑: Oui</h4>
+          )}
+          <p>Vous êtes maintenant connecté à votre espace personnel.</p>
+        </div>
+
         )}
       </section>
     </div>

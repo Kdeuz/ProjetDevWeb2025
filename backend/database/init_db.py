@@ -8,6 +8,7 @@ from app.models.PageFitness import Coach, CoursFitness, FitnessStatus
 from app.models.user import User
 from app.models.PageMusculation import ProgrammeMusculation, EquipementMusculation
 from app.models.PagePiscine import Bassin, CoursPiscine, PiscineStatus
+from app.models import Abonnement
 
 def init_database():
     """Initialize the database with sample data"""
@@ -22,9 +23,22 @@ def init_database():
         db.session.query(User).delete()  # Clear existing users
         db.session.query(ProgrammeMusculation).delete()
         db.session.query(EquipementMusculation).delete()
+        db.session.query(Abonnement).delete()
+        db.session.query(Bassin).delete()
+        db.session.query(CoursPiscine).delete()
+        db.session.query(PiscineStatus).delete()
 
-        # --- Coaches (from the first code)
-        # Define and add coaches with manually assigned IDs
+        # --- Abonnements
+        abonnements = [
+            {"id": 1, "type": "VIP"},
+            {"id": 2, "type": "Normal"}
+        ]
+
+        for ab in abonnements:
+            db.session.add(Abonnement(**ab))
+        db.session.commit()
+
+        # --- Coaches
         coaches = [
             {"id": 1, "nom": "Dupont", "prenom": "Jean", "description": "Expert en musculation et nutrition. Jean vous aidera à construire votre force et à optimiser votre alimentation."},
             {"id": 2, "nom": "Curie", "prenom": "Marie", "description": "Spécialiste en yoga et bien-être. Marie vous guidera vers un équilibre parfait entre corps et esprit."},
@@ -34,11 +48,9 @@ def init_database():
 
         for coach in coaches:
             db.session.add(Coach(**coach))
-
-        # Commit coaches to ensure they are assigned IDs before using them
         db.session.commit()
 
-        # Define and add fitness courses with correct coach_id references
+        # --- Fitness Courses
         fitness_courses = [
             {"id": 1, "jour": "Lundi", "heure": time(18, 0), "activite": "Yoga"},
             {"id": 2, "jour": "Mardi", "heure": time(19, 0), "activite": "Cardio"},
@@ -52,60 +64,55 @@ def init_database():
         for course in fitness_courses:
             db.session.add(CoursFitness(**course))
 
-        # --- Fitness status (from the first code)
+        # --- Fitness status
         db.session.add(FitnessStatus(personnes=20))
 
-        # --- Users (from the second code)
+        # --- Users
         users = [
-    {
-        "email": "admin@exemple.com", 
-        "username": "admin-1", 
-        "is_admin": True, 
-        "prenom": "AdminFirst", 
-        "nom": "AdminLast", 
-        "age": 35, 
-        "telephone": "9876543210", 
-        "password": "adminpassword",
-        "avatar_id": 1,  # Admin gets avatar1 by default
-        "avatar_url": "/assets/images/avatar1.png"
-    },
-    {
-        "email": "user@exemple.com", 
-        "username": "user-1", 
-        "is_admin": False, 
-        "prenom": "user", 
-        "nom": "1", 
-        "age": 20, 
-        "telephone": "123456789", 
-        "password": "userpassword",
-        "avatar_id": 2,
-        "avatar_url": "/assets/images/avatar2.png"
-    },
-    {
-        "email": "user2@exemple.com", 
-        "username": "user2", 
-        "is_admin": False, 
-        "prenom": "user2", 
-        "nom": "user2", 
-        "age": 22, 
-        "telephone": "222222222", 
-        "password": "user2password",
-        "avatar_id": 3,
-        "avatar_url": "/assets/images/avatar3.png"
-    },
-    {
-        "email": "user3@exemple.com", 
-        "username": "user3", 
-        "is_admin": False, 
-        "prenom": "user3", 
-        "nom": "user3", 
-        "age": 33, 
-        "telephone": "123456", 
-        "password": "user3password",
-        "avatar_id": 4,
-        "avatar_url": "/assets/images/avatar4.png"
-    },
-]
+            {
+                "email": "admin@exemple.com", 
+                "username": "admin-1", 
+                "is_admin": True, 
+                "prenom": "AdminFirst", 
+                "nom": "AdminLast", 
+                "age": 35, 
+                "telephone": "9876543210", 
+                "password": "adminpassword",
+                "avatar_id": 1,
+                "avatar_url": "/assets/images/avatar1.png",
+                "mes_records": "",
+                "abonnement_id": 1 
+            },
+            {
+                "email": "user@exemple.com", 
+                "username": "user-1", 
+                "is_admin": False, 
+                "prenom": "user", 
+                "nom": "1", 
+                "age": 20, 
+                "telephone": "123456789", 
+                "password": "userpassword",
+                "avatar_id": 2,
+                "avatar_url": "/assets/images/avatar2.png",
+                "mes_records": "",
+                "abonnement_id": 1  
+            },
+            {
+                "email": "user2@exemple.com", 
+                "username": "user2", 
+                "is_admin": False, 
+                "prenom": "user2", 
+                "nom": "user2", 
+                "age": 22, 
+                "telephone": "222222222", 
+                "password": "user2password",
+                "avatar_id": 3,
+                "avatar_url": "/assets/images/avatar3.png",
+                "mes_records": "",
+                "abonnement_id": 2
+            },
+        ]
+
         for user_data in users:
             user = User(
                 email=user_data["email"],
@@ -116,11 +123,14 @@ def init_database():
                 age=user_data["age"],
                 telephone=user_data["telephone"],
                 avatar_id=user_data["avatar_id"],
-                avatar_url=user_data["avatar_url"]
+                avatar_url=user_data["avatar_url"],
+                mes_records=user_data["mes_records"],
+                abonnement_id=user_data["abonnement_id"]
             )
-            user.set_password(user_data["password"])  # Hash the password
+            user.set_password(user_data["password"])
             db.session.add(user)
 
+        # --- Bassins
         bassins_data = [
             {"nom": "Fosse", "description": "Un bassin de plongée de 25 mètres de profondeur sublimé par un décor magnifique", "longueur": 20.0, "profondeur": 25.0},
             {"nom": "Normal", "description": "Un bassin de 25 mètres et 4 lignes", "longueur": 25.0, "profondeur": 2.0},
@@ -132,78 +142,57 @@ def init_database():
             b = Bassin(**data)
             db.session.add(b)
             bassins.append(b)
-
-        db.session.commit()
-        # --- Inside init_database() function ---
-        # After adding the bassins to the database:
-        # --- Inside init_database() function ---
-        # After adding the bassins to the database:
         db.session.commit()
 
-        # Retrieve the number of bassins in the database (instead of hardcoding 3)
-        bassins = Bassin.query.all()
-
-        # Initialize PiscineStatus dynamically for each bassin
+        # --- Piscine Status
         for bassin in bassins:
-            # Example: Setting the status to 10 for each bassin (you can change this as needed)
-            status = PiscineStatus(bassin_id=bassin.id, status=10)  # Adjust the status value as needed
+            status = PiscineStatus(bassin_id=bassin.id, status=10)
             db.session.add(status)
 
-        # Commit to save the PiscineStatus entries
-        db.session.commit()
-
-
-
-        # --- Cours
+        # --- Cours Piscine
         cours_data = [
-        {
-            "nom": "Aquagym",
-            "description": "Venez vous dépenser dans ce cours d'aquagym, idéal pour le maintien de la forme !",
-            "jour": "Lundi",
-            "heure": time(18, 0)
-        },
-        {
-            "nom": "J'apprends à nager",
-            "description": "À tout âge, rejoignez-nous et apprenez l'aisance aquatique",
-            "jour": "Mardi",
-            "heure": time(12, 30)
-        },
-        {
-            "nom": "Natation course",
-            "description": "Développez votre vitesse et endurance",
-            "jour": "Mercredi",
-            "heure": time(14, 0)
-        },
-        {
-            "nom": "Natation adulte",
-            "description": "Faites perdurer le plaisir de la natation",
-            "jour": "Jeudi",
-            "heure": time(17, 30)
-        },
-        {
-            "nom": "Réveil aquatique",
-            "description": "Réveillez-vous de bon matin, à la fraîche",
-            "jour": "Vendredi",
-            "heure": time(6, 30)
-        },
-        {
-            "nom": "Neaucture",
-            "description": "Détendez-vous dans notre fosse au travers de l'apnée",
-            "jour": "Vendredi",
-            "heure": time(21, 15)
-        }
+            {
+                "nom": "Aquagym",
+                "description": "Venez vous dépenser dans ce cours d'aquagym, idéal pour le maintien de la forme !",
+                "jour": "Lundi",
+                "heure": time(18, 0)
+            },
+            {
+                "nom": "J'apprends à nager",
+                "description": "À tout âge, rejoignez-nous et apprenez l'aisance aquatique",
+                "jour": "Mardi",
+                "heure": time(12, 30)
+            },
+            {
+                "nom": "Natation course",
+                "description": "Développez votre vitesse et endurance",
+                "jour": "Mercredi",
+                "heure": time(14, 0)
+            },
+            {
+                "nom": "Natation adulte",
+                "description": "Faites perdurer le plaisir de la natation",
+                "jour": "Jeudi",
+                "heure": time(17, 30)
+            },
+            {
+                "nom": "Réveil aquatique",
+                "description": "Réveillez-vous de bon matin, à la fraîche",
+                "jour": "Vendredi",
+                "heure": time(6, 30)
+            },
+            {
+                "nom": "Neaucture",
+                "description": "Détendez-vous dans notre fosse au travers de l'apnée",
+                "jour": "Vendredi",
+                "heure": time(21, 15)
+            }
         ]
 
         for c in cours_data:
             db.session.add(CoursPiscine(**c))
 
-        # --- Piscine Status
-        # Assuming PiscineStatus requires a `bassin_id` and `status` attribute
-        for bassin in bassins:
-            status = PiscineStatus(bassin_id=bassin.id, status=10)  # Adjust the status value as needed
-            db.session.add(status)
-
-        # --- Programmes de musculation (new from first code)
+        # --- Programmes de musculation
         programmes = [
             {"titre": "Force maximale", "description": "Développement de la force brute via des charges lourdes."},
             {"titre": "Prise de masse", "description": "Programme pour développer un volume musculaire massif."},
@@ -212,7 +201,7 @@ def init_database():
         for prog in programmes:
             db.session.add(ProgrammeMusculation(**prog))
 
-        # --- Équipements de musculation (new from first code)
+        # --- Équipements de musculation
         equipements = [
             {"nom": "Banc de musculation", "description": "Idéal pour le développé couché", "disponible": True},
             {"nom": "Haltères", "description": "Indispensables pour les exercices libres", "disponible": False},
@@ -222,7 +211,7 @@ def init_database():
         for eq in equipements:
             db.session.add(EquipementMusculation(**eq))
 
-        # Commit the users and other data to the database
+        # Commit all changes
         db.session.commit()
 
         print("Database initialized successfully!")

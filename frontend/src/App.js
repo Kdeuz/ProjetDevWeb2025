@@ -13,7 +13,6 @@ import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 import SubscribePage from "./pages/SubscribePage";
 
-;
 
 function App() {
   const [userData, setUserData] = useState(null);

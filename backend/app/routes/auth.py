@@ -10,7 +10,6 @@ auth_bp = Blueprint('auth', __name__)
 def index():
     return jsonify({"message": "API backend en ligne 🚀"})
 
-# --- Route : Inscription (avec vérification code d'invitation) ---
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -19,11 +18,9 @@ def register():
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Champs manquants'}), 400
 
-    # Check if email already exists
     if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email déjà utilise'}), 409
+        return jsonify({'error': 'Email déjà utilisé'}), 409
 
-    # Check if the user is registering as an admin (you can pass a flag in the request body)
     is_admin = data.get('is_admin', False)
 
     new_user = User(
@@ -33,18 +30,21 @@ def register():
         nom=data['nom'],
         age=int(data['age']),
         telephone=data['telephone'],
-        is_admin=is_admin  # You would need to add `is_admin` field in the User model
+        is_admin=is_admin,
+        avatar_id=1,
+        avatar_url="/assets/images/avatar1.png",
+        mes_records="Aucun record pour cet utilisateur.",
+        abonnement_id=2  # Hardcoded Normal subscription
     )
-    
-    # Hash the password
-    new_user.set_password(data['password'])
 
-    # Add new user to the database
+    new_user.set_password(data['password'])
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'Inscription réussie', 'is_admin': is_admin}), 201
-
+    return jsonify({
+        'message': 'Inscription réussie',
+        'user': new_user.to_dict()  # Use the safe to_dict() method
+    }), 201
 
 # --- Route : Connexion ---
 @auth_bp.route('/login', methods=['POST'])
@@ -64,11 +64,12 @@ def login():
 def logout():
     logout_user()
     return jsonify({'message': 'Deconnexion reussie'}), 200
+
 @auth_bp.route('/me', methods=['GET'])
 @login_required
 def me():
     user = current_user
-    
+
     # Fetch the user's subscriptions
     subscriptions = UserSubscription.query.filter_by(user_id=user.id).all()
 
@@ -76,15 +77,14 @@ def me():
     for subscription in subscriptions:
         course_type = subscription.course_type
         course_id = subscription.course_id
-        
-        # Get the course details based on type
+
         if course_type == 'fitness':
             course = CoursFitness.query.get(course_id)
             if course:
                 courses.append({
                     'type': 'fitness',
-                    'id': course.id,  # Include the course ID
-                    'course_id': course.id,  # Alternative ID field
+                    'id': course.id,
+                    'course_id': course.id,
                     'details': {
                         'activite': course.activite,
                         'jour': course.jour,
@@ -96,8 +96,8 @@ def me():
             if course:
                 courses.append({
                     'type': 'piscine',
-                    'id': course.id,  # Include the course ID
-                    'course_id': course.id,  # Alternative ID field
+                    'id': course.id,
+                    'course_id': course.id,
                     'details': {
                         'nom': course.nom,
                         'description': course.description,
@@ -110,20 +110,36 @@ def me():
             if course:
                 courses.append({
                     'type': 'muscu',
-                    'id': course.id,  # Include the course ID
-                    'course_id': course.id,  # Alternative ID field
+                    'id': course.id,
+                    'course_id': course.id,
                     'details': {
                         'titre': course.titre,
                         'description': course.description
                     }
                 })
 
-    # Get user data and include courses
-    user_data = user.to_dict()
-    user_data['courses'] = courses  # Add detailed courses to user data
-    user_data['avatar_id'] = user.avatar_id  # Add the avatar ID to the response
-    
+    # Determine abonnement name
+    abonnement_type = user.abonnement.type if user.abonnement else 'Non spécifié'
+
+
+    # Create user data dict manually to control fields
+    user_data = {
+        'email': user.email,
+        'username': user.username,
+        'nom': user.nom,
+        'prenom': user.prenom,
+        'age': user.age,
+        'telephone': user.telephone,
+        'avatar_id': user.avatar_id,
+        'records': user.mes_records,  # renamed for frontend clarity
+        'courses': courses,
+        'abonnement': abonnement_type  # Now returns an object like to_dict()
+
+    }
+
     return jsonify(user_data)
+
+
 
 @auth_bp.route('/check-auth')
 def check_auth():
@@ -131,6 +147,8 @@ def check_auth():
         return jsonify({'authenticated': True}), 200
     else:
         return jsonify({'authenticated': False}), 401
+    
+
 @auth_bp.route('/update-avatar', methods=['POST'])
 @login_required
 def update_avatar():
@@ -161,3 +179,57 @@ def update_avatar():
         db.session.rollback()
         print(f"Error updating avatar: {e}")
         return jsonify({'success': False, 'error': 'Failed to update avatar'}), 500
+    
+@auth_bp.route('/update-records', methods=['POST'])
+@login_required
+def update_records():
+    try:
+        data = request.get_json()
+        records = data.get('mes_records')
+
+        if records is None:
+            return jsonify({'error': 'Missing mes_records'}), 400
+
+        current_user.mes_records = records
+        db.session.commit()
+
+        return jsonify({
+            'message': 'mes_records updated successfully',
+            'mes_records': current_user.mes_records
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating mes_records: {e}")
+        return jsonify({'error': 'An error occurred while updating mes_records'}), 500
+    
+@auth_bp.route('/update-profile', methods=['POST'])
+@login_required
+def update_profile():
+    user = current_user
+    data = request.get_json()
+
+    try:
+        print("Incoming profile update data:", data)  # Debug log
+
+        if 'nom' in data:
+            user.nom = data['nom']
+        if 'prenom' in data:
+            user.prenom = data['prenom']
+        if 'email' in data:
+            user.email = data['email']
+        if 'username' in data:
+            user.username = data['username']
+        if 'age' in data:
+            user.age = int(data['age']) if data['age'] else None
+        if 'telephone' in data:
+            user.telephone = data['telephone']
+        if 'password' in data and data['password']:
+            user.set_password(data['password'])
+
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        print("Error updating profile:", str(e))  # Debug log
+        return jsonify({'success': False, 'error': str(e)}), 400

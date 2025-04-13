@@ -94,12 +94,19 @@ ProjetDevWeb/
     Démarrez le backend Flask :  
     ```bash
     cd ../backend
-    flask run
+    python3 run.py
     ```
-
     Démarrez le frontend React :  
     ```bash
     cd ../frontend
+    ```
+    Installer les librairies 
+    ```bash
+    npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+    ```
+
+    Lancer le serveur
+    ```bash
     npm start
     ```
 

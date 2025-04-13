@@ -4,7 +4,7 @@ from flask_login import UserMixin
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(80), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
@@ -14,9 +14,14 @@ class User(db.Model, UserMixin):
     nom = db.Column(db.String(80))
     age = db.Column(db.Integer)
     telephone = db.Column(db.String(20))
+    abonnement_id = db.Column(db.Integer, db.ForeignKey('abonnements.id'))
+    abonnement = db.relationship("Abonnement", back_populates="users")
+
     # Add avatar fields
     avatar_id = db.Column(db.Integer, default=1)  # Default to first avatar
     avatar_url = db.Column(db.String(255))  # Optional: if you want to store full URL
+    # Add new field for user records (notes)
+    mes_records = db.Column(db.Text)  # This will store the user's notes or records
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -35,9 +40,15 @@ class User(db.Model, UserMixin):
             'telephone': self.telephone,
             'is_admin': self.is_admin,
             'avatar_id': self.avatar_id,
-            'avatar_url': self.avatar_url or self.get_avatar_url()  # Use method if URL not stored
+            'avatar_url': self.avatar_url or self.get_avatar_url(),  # Use method if URL not stored
+            'mes_records': self.mes_records,  # Add the user's notes/records
+            'abonnement': {
+                'id': self.abonnement.id,
+                'type': self.abonnement.type  
+           }
         }
+        
     
     def get_avatar_url(self):
         # Example function to generate the avatar URL
-        return f"/avatars/{self.avatar_id}.png" 
+        return f"/avatar{self.avatar_id}.png"

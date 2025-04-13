@@ -9,7 +9,7 @@ from app.models.PageFitness import Coach, CoursFitness, FitnessStatus
 from app.models.PageMusculation import ProgrammeMusculation, EquipementMusculation  # Import ProgrammeMusculation and EquipementMusculation
 from app.models.PagePiscine import CoursPiscine, PiscineStatus, Bassin
 from datetime import time
-
+from app.models.user import User
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -553,3 +553,37 @@ def get_bassins_status():
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# Route de suppression
+@admin_bp.route('/api/admin/delete-user/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    user = User.query.get(id)
+    if user is None:
+        return jsonify({'error': 'Utilisateur non trouvé'}), 404  # Si l'utilisateur n'est pas trouvé, on renvoie une erreur
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message': 'Utilisateur supprimé avec succès'}), 200
+
+
+@admin_bp.route('/api/admin/get-users', methods=['GET'])
+def get_users():
+    try:
+        users = User.query.filter(User.is_admin != True).all()
+        users_data = []
+        
+        for user in users:
+            try:
+                if user: 
+                    user_dict = user.to_dict()
+                    if user_dict.get('id'):  # Ensure id exists
+                        users_data.append(user_dict)
+            except Exception as e:
+                print(f"Skipping invalid user: {e}")
+                continue
+                
+        return jsonify(users_data), 200
+        
+    except Exception as e:
+        print(f"Error in get_users: {str(e)}")
+        return jsonify({"error": "Failed to fetch users"}), 500

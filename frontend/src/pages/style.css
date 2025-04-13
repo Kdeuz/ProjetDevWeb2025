@@ -1312,3 +1312,99 @@ p {
 .close-modal-btn:hover {
   background-color: #c0392b;
 }
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.save-btn, .edit-profile-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-profile-btn {
+  margin-top: 15px;
+  background-color: #2196F3;
+}
+/* Responsive adjustments for text and tables */
+@media (max-width: 768px) {
+  body {
+    font-size: 0.9rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header p {
+    font-size: 0.9rem;
+  }
+
+  .schedule, .equipment-table, .course-details, .basins-table {
+    font-size: 0.8rem;
+  }
+
+  .schedule th, .schedule td, 
+  .equipment-table th, .equipment-table td, 
+  .course-details th, .course-details td, 
+  .basins-table th, .basins-table td {
+    padding: 8px;
+  }
+
+  .schedule-container, .equipment-table, .basins-table {
+    overflow-x: auto;
+  }
+}

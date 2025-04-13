@@ -5,3 +5,4 @@ from .PagePiscine import PagePiscine, CoursPiscine, PiscineStatus, Bassin
 from .PageMusculation import ProgrammeMusculation, EquipementMusculation
 from .Contact import ContactMessage
 from .Subscriptions import UserSubscription
+from .Abonnement import Abonnement

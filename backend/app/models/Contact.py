@@ -1,7 +1,6 @@
 # models/contact.py
-
 from datetime import datetime
-from .. import db  # Assuming __init__.py in your package initializes SQLAlchemy instance
+from .. import db
 
 class ContactMessage(db.Model):
     __tablename__ = 'contact_messages'
@@ -11,6 +10,7 @@ class ContactMessage(db.Model):
     email = db.Column(db.String(120), nullable=False)
     message = db.Column(db.Text, nullable=False)
     date_envoi = db.Column(db.DateTime, default=datetime.utcnow)
+    is_vip_message = db.Column(db.Boolean, default=False)  # Add this field to distinguish VIP messages
 
     def to_dict(self):
         return {
@@ -18,5 +18,6 @@ class ContactMessage(db.Model):
             'nom': self.nom,
             'email': self.email,
             'message': self.message,
-            'date_envoi': self.date_envoi.isoformat()
+            'date_envoi': self.date_envoi.isoformat(),
+            'is_vip_message': self.is_vip_message
         }

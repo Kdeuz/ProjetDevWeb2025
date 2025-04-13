@@ -1,30 +1,42 @@
 import React, { useState } from "react";
 import './style.css';
 import RegisterPage from "./RegisterPage";
-import AdminFitnessPage from "./AdminFitnessPage"; // Import the fitness management component
-import AdminMusculationPage from "./AdminMusculationPage"; // Import the musculation management component
-import AdminPiscinePage from "./AdminPiscinePage"; // Import the piscine management component
+import AdminFitnessPage from "./AdminFitnessPage";
+import AdminMusculationPage from "./AdminMusculationPage";
+import AdminPiscinePage from "./AdminPiscinePage";
+import AdminStatisticPage from "./AdminStatisticPage";
+import DeleteUserPage from "./DeleteUserPage"; // Import the DeleteUserPage
 
 export default function AdminPage() {
   const [afficherSalles, setAfficherSalles] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showFitnessManagement, setShowFitnessManagement] = useState(false);
-  const [showMusculationManagement, setShowMusculationManagement] = useState(false); // State for musculation management
-  const [showPiscineManagement, setShowPiscineManagement] = useState(false); // State for piscine management
+  const [showMusculationManagement, setShowMusculationManagement] = useState(false);
+  const [showPiscineManagement, setShowPiscineManagement] = useState(false);
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showDeleteUser, setShowDeleteUser] = useState(false);
 
   const handleFitnessClick = () => {
     setShowFitnessManagement(true);
-    setAfficherSalles(false); // Hide the facilities grid
+    setAfficherSalles(false);
   };
 
   const handleMusculationClick = () => {
     setShowMusculationManagement(true);
-    setAfficherSalles(false); // Hide the facilities grid
+    setAfficherSalles(false);
   };
 
   const handlePiscineClick = () => {
     setShowPiscineManagement(true);
-    setAfficherSalles(false); // Hide the facilities grid
+    setAfficherSalles(false);
+  };
+
+  const handleStatisticsClick = () => {
+    setShowStatistics(true);
+  };
+
+  const handleDeleteUserClick = () => {
+    setShowDeleteUser(true);
   };
 
   return (
@@ -34,7 +46,6 @@ export default function AdminPage() {
       </header>
 
       <div className="admin-content">
-        {/* Show either the fitness management, musculation management, or piscine management */}
         {showFitnessManagement ? (
           <div className="fitness-management-container">
             <button 
@@ -64,6 +75,26 @@ export default function AdminPage() {
               ← Retour au panneau d'administration
             </button>
             <AdminPiscinePage />
+          </div>
+        ) : showStatistics ? (
+          <div className="statistics-container">
+            <button 
+              onClick={() => setShowStatistics(false)}
+              className="btn-back"
+            >
+              ← Retour au panneau d'administration
+            </button>
+            <AdminStatisticPage />
+          </div>
+        ) : showDeleteUser ? (
+          <div className="delete-user-container">
+            <button 
+              onClick={() => setShowDeleteUser(false)}
+              className="btn-back"
+            >
+              ← Retour au panneau d'administration
+            </button>
+            <DeleteUserPage />
           </div>
         ) : (
           <>
@@ -106,6 +137,28 @@ export default function AdminPage() {
                   </button>
                 </div>
               )}
+            </section>
+
+            {/* Section Statistiques */}
+            <section className="admin-section">
+              <h2>Statistiques</h2>
+              <button 
+                onClick={handleStatisticsClick} 
+                className="btn-toggle"
+              >
+                <span className="icon">📊</span> Afficher les statistiques
+              </button>
+            </section>
+
+            {/* Section Supprimer un Utilisateur */}
+            <section className="admin-section">
+              <h2>Supprimer un Adhérent</h2>
+              <button 
+                onClick={handleDeleteUserClick} 
+                className="btn-toggle"
+              >
+                <span className="icon">❌</span> Supprimer un utilisateur
+              </button>
             </section>
           </>
         )}
